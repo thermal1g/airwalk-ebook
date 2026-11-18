@@ -1,11 +1,16 @@
 (() => {
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// phones and tablets: one WebGL scene (the hero book) only, no live iframes, native scrolling; keeps iOS Safari inside its memory budget
+const TOUCH = matchMedia('(hover:none),(pointer:coarse)').matches;
+if (TOUCH) document.documentElement.classList.add('touch');
 const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
 gsap.registerPlugin(ScrollTrigger, SplitText);
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 // ---------- smooth scroll ----------
 let lenis = null;
-if (!RM) {
+if (RM || TOUCH) gsap.ticker.lagSmoothing(500, 33);
+if (!RM && !TOUCH) {
   lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 1 });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(500, 33);
@@ -251,7 +256,7 @@ gsap.to('.cvis .phone', { y: -120, ease: 'none', scrollTrigger: { trigger: '.cas
 
 // ---------- 3D presentation deck ----------
 const dcv = $('#deck');
-if (dcv && window.AW && !RM) { let dk = null;
+if (dcv && window.AW && !RM && !TOUCH) { let dk = null;
   const dl = () => $('.dl .ctas a').click();
   ScrollTrigger.create({ trigger: '.deck3d', start: 'top 150%', end: 'bottom -50%',
     onToggle: s => { if (!dk) { dk = AW.Deck(dcv, JSON.parse(dcv.dataset.pages), { onClick: dl }); dcv.parentElement.classList.add('ok'); } s.isActive ? dk.play() : dk.pause(); } });
@@ -272,7 +277,17 @@ gsap.from('.cl > *', { y: 30, opacity: 0, stagger: .08, duration: .7, scrollTrig
 // ---------- warp carousel: Aron's launch kit (stories, carousel slides, reels, launch-day set) ----------
 const warpEl = $('.warp');
 const GLOWS = ['#ff2b2b', '#ff5a3c', '#e50914', '#ff3d55', '#ff7a24', '#d10a14'];
-if (warpEl && window.AW) {
+if (warpEl && TOUCH) {
+  // phones: a swipeable strip instead of the WebGL ring
+  const cards = JSON.parse(warpEl.dataset.cards), strip = document.createElement('div'); strip.className = 'wstrip';
+  strip.innerHTML = cards.map(c => c.video ? `<figure style='--a:${c.aspect}'><video src='${c.src}' muted loop playsinline preload='none'></video><figcaption>${c.cap}</figcaption></figure>` : `<figure style='--a:${c.aspect}'><img src='${c.src}' alt='' loading='lazy' decoding='async'><figcaption>${c.cap}</figcaption></figure>`).join('');
+  warpEl.classList.add('flat'); warpEl.appendChild(strip);
+  const cnt = $('.wc b', warpEl), figs = $$('figure', strip);
+  const io = new IntersectionObserver(es => es.forEach(e => { const v = $('video', e.target); if (e.isIntersecting && e.intersectionRatio > .6) { cnt.textContent = String(figs.indexOf(e.target) + 1).padStart(2, '0'); v && v.play().catch(() => {}); } else v && v.pause(); }), { root: strip, threshold: [0, .6] });
+  figs.forEach(f => io.observe(f));
+  const go = d => strip.scrollBy({ left: d * (figs[0].offsetWidth + 14), behavior: 'smooth' });
+  $('.wb.prev', warpEl).addEventListener('click', () => go(-1)); $('.wb.next', warpEl).addEventListener('click', () => go(1));
+} else if (warpEl && window.AW) {
   const cards = JSON.parse(warpEl.dataset.cards); let warp = null;
   const cnt = $('.wc b', warpEl), cap = $('.wcap', warpEl);
   const make = () => {
@@ -289,7 +304,7 @@ if (warpEl && window.AW) {
 
 // ---------- footer: the book in a vortex of pages ----------
 const fcan = $('#fcan');
-if (fcan && window.AW && !RM) {
+if (fcan && window.AW && !RM && !TOUCH) {
   let foot = null;
   ScrollTrigger.create({ trigger: '#foot', start: 'top 160%', end: 'bottom top',
     onToggle: s => { if (!foot) { const fl = JSON.parse(fcan.dataset.fly), lp = pageTex('left');
@@ -309,6 +324,7 @@ $$('.live').forEach(box => {
   const fit = () => { const s = box.clientWidth / w; fr.style.width = w + 'px'; fr.style.height = box.clientHeight / s + 'px'; fr.style.transform = `scale(${s})`; };
   new ResizeObserver(fit).observe(box); fit();
   fr.addEventListener('load', () => { if (fr.src) box.classList.add('loaded'); });
+  if (TOUCH) { fr.remove(); $('.try', box).addEventListener('click', () => window.open(box.dataset.src, '_blank', 'noopener')); return; }
   ScrollTrigger.create({ trigger: box, start: 'top 160%', once: true, onEnter: () => { fr.src = box.dataset.src; } });
   $('.try', box).addEventListener('click', () => { box.classList.add('on'); fr.tabIndex = 0; fr.focus(); });
   box.addEventListener('mouseleave', () => { box.classList.remove('on'); fr.tabIndex = -1; });
@@ -410,4 +426,7 @@ $$('.q').forEach(q => $('button', q).addEventListener('click', () => {
 
 addEventListener('load', () => ScrollTrigger.refresh());
 document.fonts && document.fonts.ready.then(() => ScrollTrigger.refresh());
+// videos play only while on screen
+{ const vio = new IntersectionObserver(es => es.forEach(e => { const v = e.target; if (e.isIntersecting) { if (v.preload === 'none') v.preload = 'metadata'; v.play().catch(() => {}); } else v.pause(); }), { rootMargin: '200px 0px' });
+  $$('video[autoplay]').forEach(v => { v.removeAttribute('autoplay'); v.pause(); vio.observe(v); }); }
 })();

@@ -211,7 +211,7 @@ nav ul a:hover:after{transform:scaleX(1);transform-origin:left}
 .dl{display:grid;grid-template-columns:1fr 1fr;gap:5vw;align-items:center}
 .dl .thumb{display:block;perspective:1200px}.dl .thumb img{width:100%}.dl .thumb img{transform-style:preserve-3d;box-shadow:0 40px 120px rgba(229,9,20,.3),0 30px 80px #000;border:1px solid #2a2a2a;will-change:transform}
 .dl .meta{margin-top:18px;color:var(--m);font-size:14px}
-@media (max-width:900px){.dl{grid-template-columns:1fr}}
+@media (max-width:900px){.dl{grid-template-columns:minmax(0,1fr)}}
 /* contact */
 #contact{padding-bottom:40px;overflow:hidden}
 .ct{display:grid;grid-template-columns:1.1fr .9fr;gap:5vw;margin-top:60px}.ct>*{min-width:0}.cl .D{overflow-wrap:anywhere}
@@ -323,4 +323,17 @@ footer{position:relative;overflow:hidden;background:radial-gradient(ellipse 70% 
 .deck3d{position:relative;height:min(78vh,760px);margin-right:calc(var(--pad) * -1)}
 .deck3d canvas{position:absolute;inset:0;width:100%;height:100%;cursor:pointer}
 .deck3d.ok .thumb{display:none}.deck3d .thumb{position:absolute;inset:15% 5%}
-@media (max-width:900px){.dl{grid-template-columns:1fr}.deck3d{height:60vh;margin:0 calc(var(--pad) * -1)}}
+@media (max-width:900px){.dl{grid-template-columns:minmax(0,1fr)}.deck3d{height:60vh;margin:0 calc(var(--pad) * -1)}}
+
+@media (max-width:600px){.dl .h2{font-size:9.4vw}.dl .btns,.dl .acts{flex-wrap:wrap}.dl a.btn{max-width:100%}}
+
+/* touch devices: lighter page */
+.touch .grain,.touch .cur,.touch .cdot{display:none}
+.touch #fcan{display:none}
+.warp.flat{height:auto}.warp.flat canvas,.warp.flat .whint,.warp.flat .wcap,.warp.flat .wglow{display:none}
+.wstrip{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 var(--pad) 26px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.wstrip::-webkit-scrollbar{display:none}
+.wstrip figure{flex:none;width:min(72vw,340px);scroll-snap-align:center}
+.wstrip{align-items:center}.wstrip img,.wstrip video{width:100%;aspect-ratio:var(--a,.5625);object-fit:cover;background:#111;box-shadow:0 30px 70px rgba(229,9,20,.25),0 0 0 1px #222}
+.wstrip figcaption{margin-top:12px;font-size:13px;color:var(--m)}
+.warp.flat .wctl{position:relative;left:auto;bottom:auto;transform:none;justify-content:center;margin-top:10px}
+.touch .deck3d canvas{display:none}.touch .deck3d .thumb{inset:8% 0}
