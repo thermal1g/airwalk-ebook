@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /aron-bob/ghid-tesla/multumim/
+Disallow: /aron-bob/tesla-guide/thank-you/
+
+Sitemap: https://ebook.airwalk.ro/sitemap.xml
