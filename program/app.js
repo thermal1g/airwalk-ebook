@@ -212,15 +212,6 @@ ScrollTrigger.matchMedia({
   }
 });
 
-// ---------- design fan ----------
-const fan = $$('.fan img'), n = fan.length;
-const ftl = gsap.timeline({ scrollTrigger: { trigger: '.fan', start: 'top 85%', end: 'center 45%', scrub: 1 } });
-fan.forEach((im, i) => {
-  const k = i - (n - 1) / 2;
-  ftl.fromTo(im, { xPercent: -50, yPercent: -50, x: 0, y: 60, rotate: 0, scale: .8 },
-    { x: () => k * Math.min(innerWidth * .15, 270), y: Math.abs(k) * 30, rotate: k * 6, scale: 1, ease: 'power2.out' }, 0);
-});
-
 // ---------- sales page scroll inside the browser ----------
 const shot = $('.browser .vp img');
 if (shot) gsap.to(shot, { y: () => -(shot.offsetHeight - shot.parentNode.offsetHeight), ease: 'none', scrollTrigger: { trigger: '.pp', start: 'top 70%', end: 'bottom 20%', scrub: 1, invalidateOnRefresh: true } });
@@ -389,18 +380,111 @@ if (!RM && matchMedia('(hover:hover) and (pointer:fine)').matches) {
   });
 }
 
-// ---------- design fan: point at a page and it comes into focus, the others step back and blur ----------
+// ---------- design: the pages on a turning drum (horizontal). It steps one page at a time, drag or swipe to spin it,
+// click a page to bring it to the front, hover to stop it ----------
 {
-  const fp = $$('.fan img'), wrap = $('.fan'), c = (fp.length - 1) / 2;
+  const wrap = $('.fan');
   if (wrap) {
-    fp.forEach((im, i) => im.style.setProperty('--k', i - c));
-    const focus = h => {
-      wrap.classList.toggle('focus', h >= 0);
-      fp.forEach((im, i) => { const d = h < 0 ? 0 : i - h; im.classList.toggle('on', i === h); im.style.setProperty('--push', h < 0 || !d ? 0 : Math.sign(d) * (60 - Math.min(Math.abs(d), 3) * 8)); im.style.setProperty('--d', Math.abs(d)); });
+    const src = $$('img', wrap), drum = document.createElement('div'); drum.className = 'drum';
+    const cards = [...src, ...src.map(i => i.cloneNode(true))].map(im => {
+      const d = document.createElement('div'); d.className = 'fc'; im.draggable = false; d.appendChild(im);
+      const sh = document.createElement('i'); d.appendChild(sh); drum.appendChild(d); return { d, sh };
+    });
+    wrap.textContent = ''; wrap.appendChild(drum);
+    const N = cards.length, STEP = 360 / N, AR = 1281 / 720;
+    let cw = 0, R = 0, rot = 200, tgt = 0, vel = 0, hover = -1, drag = null, inside = false, visible = false, last = 0, nextStep = 0;
+    const size = () => {
+      cw = Math.round(Math.min(290, Math.max(140, innerWidth * (innerWidth < 700 ? .4 : .165))));
+      R = cw * 1.1 / (2 * Math.tan(Math.PI / N));
+      wrap.style.setProperty('--cw', cw + 'px'); wrap.style.height = Math.round(cw * AR * 1.32 + 40) + 'px';
     };
-    fp.forEach((im, i) => { im.addEventListener('pointerenter', () => focus(i)); });
-    wrap.addEventListener('pointerleave', () => focus(-1));
-    if (!matchMedia('(hover:hover)').matches) document.addEventListener('pointerdown', e => { if (!wrap.contains(e.target)) focus(-1); });
+    size(); addEventListener('resize', size);
+    const snap = () => { tgt = Math.round(tgt / STEP) * STEP; };
+    const toFront = i => { const want = -i * STEP; tgt = want + 360 * Math.round((tgt - want) / 360); };
+    function frame(now) {
+      if (!visible) return; requestAnimationFrame(frame);
+      const dt = Math.min(.05, (now - last) / 1000 || .016); last = now;
+      if (!drag && vel) { tgt += vel * dt; vel *= Math.pow(.03, dt); if (Math.abs(vel) < 8) { vel = 0; snap(); } }
+      if (!drag && !vel && !inside && now > nextStep) { tgt -= STEP; nextStep = now + 2300; }
+      rot += (tgt - rot) * Math.min(1, dt * (drag ? 18 : 5.5));
+      drum.style.transform = `translateZ(${-R}px)`;
+      for (let i = 0; i < N; i++) {
+        const c = cards[i], a = ((i * STEP + rot) % 360 + 540) % 360 - 180, ab = Math.abs(a);
+        if (ab > 105) { if (c.v !== 0) { c.d.style.visibility = 'hidden'; c.v = 0; } continue; }
+        if (c.v !== 1) { c.d.style.visibility = ''; c.v = 1; }
+        const rad = a * Math.PI / 180, front = Math.max(0, 1 - ab / STEP), lift = i === hover ? 1 : 0;
+        const tilt = -Math.sin(rad) * 7, z = R + front * cw * .32 + lift * cw * .12;
+        c.d.style.transform = `rotateY(${a.toFixed(2)}deg) translateZ(${z.toFixed(1)}px) rotateZ(${tilt.toFixed(2)}deg) scale(${(1 + front * .06 + lift * .04).toFixed(3)})`;
+        c.sh.style.opacity = Math.min(.85, (1 - Math.cos(rad)) * 1.1 + (front ? 0 : .08)).toFixed(3);
+      }
+    }
+    new IntersectionObserver(es => es.forEach(e => {
+      const was = visible; visible = e.isIntersecting;
+      if (visible && !was) { last = performance.now(); nextStep = last + 1400; requestAnimationFrame(frame); }
+    }), { rootMargin: '100px' }).observe(wrap);
+    // drag / swipe (vertical page scroll still works on touch)
+    const k = () => STEP / (cw * 1.1);
+    wrap.addEventListener('pointerdown', e => { drag = { x: e.clientX, r: tgt, lx: e.clientX, lt: performance.now(), v: 0, moved: false, id: e.pointerId }; vel = 0; });
+    addEventListener('pointermove', e => {
+      if (drag && e.pointerId === drag.id) {
+        const dx = e.clientX - drag.x; if (Math.abs(dx) > 5 && !drag.moved) { drag.moved = true; wrap.classList.add('drag'); try { wrap.setPointerCapture(e.pointerId); } catch (_) {} }
+        if (drag.moved) { tgt = drag.r + dx * k(); const t = performance.now(), d = t - drag.lt; if (d > 0) drag.v = drag.v * .6 + ((e.clientX - drag.lx) * k() / (d / 1000)) * .4; drag.lx = e.clientX; drag.lt = t; }
+      }
+    }, { passive: true });
+    const up = e => {
+      if (!drag || e.pointerId !== drag.id) return;
+      wrap.classList.remove('drag');
+      if (drag.moved) { vel = Math.max(-900, Math.min(900, drag.v)); if (Math.abs(vel) < 40) { vel = 0; snap(); } }
+      else { const fc = e.target.closest && e.target.closest('.fc'); if (fc) toFront(cards.findIndex(c => c.d === fc)); }
+      drag = null; nextStep = performance.now() + 3000;
+    };
+    addEventListener('pointerup', up); addEventListener('pointercancel', e => { if (drag) { drag.moved = true; drag.v = 0; up(e); } });
+    if (matchMedia('(hover:hover)').matches) {
+      wrap.addEventListener('pointerenter', () => { inside = true; });
+      wrap.addEventListener('pointerleave', () => { inside = false; hover = -1; nextStep = performance.now() + 900; });
+      wrap.addEventListener('pointermove', e => { const fc = e.target.closest('.fc'); hover = fc ? cards.findIndex(c => c.d === fc) : -1; });
+    }
+  }
+}
+
+// ---------- who it's for: each line makes the phone react ----------
+{
+  const scr = $('.who .phone .scr'), lis = $$('.who .ls li');
+  if (scr && lis.length) {
+    const RO = document.documentElement.lang === 'ro', base = scr.querySelector('img').src.replace(/[^/]+$/, '');
+    const qs = RO ? ['Cât consumă iarna?', 'Cum încarci acasă?', 'Ce setezi prima dată?'] : ['How much does it use in winter?', 'How do you charge at home?', 'What do you set up first?'];
+    const nm = ['@andrei.m', '@ioana_c', '@vlad.t'];
+    const rx = document.createElement('div'); rx.className = 'rx'; rx.setAttribute('aria-hidden', 'true');
+    rx.innerHTML = `<div class='rx-dim'></div>
+      <div class='rx1'><i class='box'></i><span class='tag'><b>0</b> ${RO ? 'urmăritori' : 'followers'} <em>✓</em></span><span class='rng'>15.000 – 200.000</span></div>
+      <div class='rx2'>${qs.map((q, i) => `<div class='bub' style='--i:${i}'><i></i><div><b>${nm[i]}</b><span>${q}</span></div></div>`).join('')}</div>
+      <div class='rx3'><img src='${base}p17.webp' alt=''><span>${RO ? 'Metoda ta, cu cifrele tale' : 'Your method, your numbers'}</span></div>
+      <div class='rx4'><div class='ghost'><span>+</span></div><b>${RO ? 'Ghidul tău' : 'Your guide'}</b><small>${RO ? 'încă nu există' : 'doesn’t exist yet'}</small></div>`;
+    scr.appendChild(rx);
+    const num = $('.rx1 b', rx); let cur = -1, tw = null;
+    const set = i => {
+      if (i === cur) return; cur = i; rx.dataset.on = i < 0 ? '' : i + 1;
+      lis.forEach((li, j) => li.classList.toggle('on', j === i));
+      tw && tw.kill();
+      if (i === 0) { const o = { v: 0 }; tw = gsap.to(o, { v: 60000, duration: 1.1, ease: 'power3.out', onUpdate: () => { num.textContent = Math.round(o.v).toLocaleString(RO ? 'ro-RO' : 'en-US'); } }); }
+    };
+    if (matchMedia('(hover:hover)').matches) {
+      lis.forEach((li, i) => li.addEventListener('pointerenter', () => set(i)));
+      $('.who .ls').addEventListener('pointerleave', () => set(-1));
+    } else {
+      lis.forEach((li, i) => ScrollTrigger.create({ trigger: li, start: 'top 62%', end: 'bottom 62%', onToggle: s => { if (s.isActive) set(i); } }));
+      ScrollTrigger.create({ trigger: '.who .ls', start: 'top 62%', end: 'bottom 62%', onLeave: () => set(-1), onLeaveBack: () => set(-1) });
+    }
+  }
+}
+
+// ---------- case study: the street display switches on (flicker, then a light sweep) ----------
+{
+  const m = $('.cvis .mupi');
+  if (m) {
+    const on = () => { m.classList.remove('lit'); void m.offsetWidth; m.classList.add('lit'); };
+    if (matchMedia('(hover:hover)').matches) { m.addEventListener('pointerenter', on); m.addEventListener('pointerleave', () => m.classList.remove('lit')); }
+    else ScrollTrigger.create({ trigger: m, start: 'top 70%', once: true, onEnter: on });
   }
 }
 
