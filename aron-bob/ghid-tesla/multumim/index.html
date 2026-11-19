@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <title>Mulțumim! · Ghidul complet Tesla pentru România</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,300..800&display=swap" rel="stylesheet">
+
 <style>
+@font-face{font-family:"Archivo";font-weight:100 900;font-stretch:62% 125%;src:url(/program/fonts/ar-l.woff2) format("woff2")}
+@font-face{font-family:"Archivo";font-weight:100 900;font-stretch:62% 125%;unicode-range:U+0100-024F,U+0218-021B;src:url(/program/fonts/ar-e.woff2) format("woff2")}
 :root{--red:#E50914;--paper:#F5F5F1;--fog:#A9A5A2;--line:#2A2A2A}
 *{box-sizing:border-box;margin:0}
 body{background:#000;color:var(--paper);font:400 17px/1.6 "Archivo",system-ui,sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;
@@ -39,7 +40,7 @@ li:hover::after{transform:none}
 }
 @media (max-width:600px){li{grid-template-columns:44px 1fr}li::before{font-size:34px}.btn{display:block;text-align:center;clip-path:none}}
 </style>
-</head>
+<script src='/program/track.js?v=2' data-ga='G-XN7M3PVKFG' data-policy='/aron-bob/ghid-tesla/cookie-uri/'></script></head>
 <body>
 <div class="wrap">
  <div class="brand"><b>ARON</b>BOB</div>
@@ -66,5 +67,5 @@ li:hover::after{transform:none}
 var s=new URLSearchParams(location.search).get('status');
 if(s==='failed'||s==='canceled')document.body.classList.add('failed');
 </script>
-</body>
+<p class="lf" style="max-width:760px;margin:0 auto;padding:0 24px 40px;display:flex;flex-wrap:wrap;gap:8px 22px;font-size:14px;color:#A9A5A2"><a style="color:inherit" href='/aron-bob/ghid-tesla/termeni/'>Termeni și condiții</a><a style="color:inherit" href='/aron-bob/ghid-tesla/confidentialitate/'>Politica de confidențialitate</a><a style="color:inherit" href='/aron-bob/ghid-tesla/cookie-uri/'>Politica de cookie-uri</a><a style="color:inherit" href='#' onclick='awConsent&&awConsent();return false'>Cookie-uri</a></p></body>
 </html>
