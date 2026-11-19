@@ -488,3 +488,5 @@ nav ul a,nav .navr a{white-space:nowrap}nav>ul{gap:clamp(12px,1.6vw,30px)}@media
 .jfoot a[aria-current]{color:var(--w)}
 .fbar .flegal{display:flex;flex-wrap:wrap;gap:8px 22px}.fbar .flegal a{color:inherit}.fbar .flegal a:hover{color:var(--w)}
 footer.jfoot{min-height:0;align-items:center}
+
+.napply{display:inline-flex;align-items:center;font-family:G;font-weight:800;font-stretch:125%;font-size:12px;letter-spacing:.14em;text-transform:uppercase;padding:11px 16px;background:var(--r);color:#fff;transition:background .2s}.napply:hover{background:#b8070f}.napply:focus-visible{outline:2px solid #fff;outline-offset:3px}@media (max-width:600px){nav .navr{gap:10px;margin-left:8px}nav .lang{font-size:11px;letter-spacing:.1em}.napply{padding:9px 11px;font-size:10.5px;letter-spacing:.1em}nav .logo{font-size:min(4.4vw,20px);margin-right:8px}}
