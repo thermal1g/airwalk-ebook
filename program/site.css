@@ -490,12 +490,5 @@ nav ul a,nav .navr a{white-space:nowrap}nav>ul{gap:clamp(12px,1.6vw,30px)}@media
 footer.jfoot{min-height:0;align-items:center}
 
 @media (max-width:600px){nav .navr{gap:10px;margin-left:8px}nav .lang{font-size:11px;letter-spacing:.1em}.navr .btn.napp{display:inline-flex;padding:9px 11px;font-size:10.5px;letter-spacing:.1em}nav .logo{font-size:min(4.4vw,20px);margin-right:8px}}
-/* footer centred (Alexandru, 20 Nov 2026) */
-.fin .ftop{display:flex;flex-direction:column;align-items:center;text-align:center}
-.fin .ft{margin-left:auto;margin-right:auto}
-.fin .ctas{justify-content:center}
-.fcols{margin-left:auto;margin-right:auto;width:100%;text-align:center}
-.fcols div{align-items:center}
-.fbar{justify-content:center;text-align:center}
-.flegal{justify-content:center}
-.jfoot{justify-content:center;text-align:center}
+/* footer centred on mobile only (Alexandru, 20 Nov 2026) */
+@media (max-width:600px){.fin .ftop{display:flex;flex-direction:column;align-items:center;text-align:center}.fin .ft{margin-left:auto;margin-right:auto}.fin .ctas{justify-content:center}.fcols{margin-left:auto;margin-right:auto;width:100%;text-align:center}.fcols div{align-items:center}.fbar{justify-content:center;text-align:center}.flegal{justify-content:center}.jfoot{justify-content:center;text-align:center}}
