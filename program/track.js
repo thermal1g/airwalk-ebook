@@ -4,7 +4,7 @@
    - Google Analytics loads ONLY after the visitor clicks Accept. No cookies before that.
    - GA4 ID comes from data-ga on this script tag; empty = no banner, no analytics. */
 (() => {
-  const S = document.currentScript, GA = (S && S.dataset.ga || '').trim(), POL = S && S.dataset.policy;
+  const S = document.currentScript, GA = (S && S.dataset.ga || '').trim(), FB = (S && S.dataset.fb || '').trim(), POL = S && S.dataset.policy;
   const RO = (document.documentElement.lang || 'ro').startsWith('ro');
   const store = {
     get: k => { try { return localStorage.getItem(k) } catch (e) { return null } },
@@ -25,8 +25,8 @@
     const old = JSON.parse(store.get('aw_src') || 'null'); const fresh = old && Date.now() - old.t < 30 * 864e5;
     if (!fresh || utm.length) store.set('aw_src', JSON.stringify(here));
   } catch (e) {} };
-  if (store.get('aw_consent') === 'yes') persist();
-  window.awSource = () => { try { const o = store.get('aw_consent') === 'yes' ? JSON.parse(store.get('aw_src') || 'null') : here; return o ? o.s + ' (landed on ' + o.p + ')' : 'direct' } catch (e) { return 'unknown' } };
+  if (store.get('aw_consent') === 'yes2') persist();
+  window.awSource = () => { try { const o = store.get('aw_consent') === 'yes2' ? JSON.parse(store.get('aw_src') || 'null') : here; return o ? o.s + ' (landed on ' + o.p + ')' : 'direct' } catch (e) { return 'unknown' } };
 
   // ---- Google Analytics 4, only after consent
   window.awTrack = () => {};
@@ -40,7 +40,11 @@
     gtag('config', GA, { anonymize_ip: true });
     const s = document.createElement('script'); s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(GA);
     document.head.appendChild(s);
-    window.awTrack = (ev, p) => gtag('event', ev, p || {});
+    window.awTrack = (ev, p) => { gtag('event', ev, p || {}); if (window.fbq && ev === 'generate_lead') fbq('track', 'Lead'); };
+    if (FB) { // Meta Pixel, same consent as Analytics
+      !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', FB); fbq('track', 'PageView');
+    }
   };
 
   const css = `#awc{position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;max-width:560px;margin-left:auto;background:#0c0c0c;color:#F5F5F1;border:1px solid #2a2a2a;box-shadow:0 30px 80px rgba(0,0,0,.6);padding:22px 24px;font:15px/1.5 A,"Archivo",system-ui,sans-serif}
@@ -49,23 +53,23 @@
 #awc .y{background:#E50914;color:#fff}#awc .n{background:transparent;color:#F5F5F1;border:1px solid #444}
 #awc button:focus-visible{outline:2px solid #fff;outline-offset:2px}`;
   const T = RO
-    ? { p: `Folosim Google Analytics și reținem de unde ai ajuns pe site, doar dacă accepți. Detalii în <a href="${POL || '/cookie-uri/'}">Politica de cookie-uri</a>.`, y: 'Accept', n: 'Refuz' }
-    : { p: `We use Google Analytics and remember where you came from, only if you accept. Details in our <a href="${POL || '/en/cookies/'}">Cookie Policy</a>.`, y: 'Accept', n: 'Decline' };
+    ? { p: `Folosim Google Analytics${FB ? ', Meta Pixel (ca să măsurăm reclamele)' : ''} și reținem de unde ai ajuns pe site, doar dacă accepți. Detalii în <a href="${POL || '/cookie-uri/'}">Politica de cookie-uri</a>.`, y: 'Accept', n: 'Refuz' }
+    : { p: `We use Google Analytics${FB ? ', the Meta Pixel (to measure our ads)' : ''} and remember where you came from, only if you accept. Details in our <a href="${POL || '/en/cookies/'}">Cookie Policy</a>.`, y: 'Accept', n: 'Decline' };
   const banner = () => {
     if (document.getElementById('awc')) return;
     if (!document.getElementById('awcs')) { const st = document.createElement('style'); st.id = 'awcs'; st.textContent = css; document.head.appendChild(st); }
     const d = document.createElement('div'); d.id = 'awc'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-label', 'Cookies');
     d.innerHTML = `<p>${T.p}</p><div class=r><button class=y type=button>${T.y}</button><button class=n type=button>${T.n}</button></div>`;
-    d.querySelector('.y').onclick = () => { store.set('aw_consent', 'yes'); persist(); d.remove(); load(); };
+    d.querySelector('.y').onclick = () => { store.set('aw_consent', 'yes2'); persist(); d.remove(); load(); };
     d.querySelector('.n').onclick = () => {
       const was = store.get('aw_consent'); store.set('aw_consent', 'no'); try { localStorage.removeItem('aw_src') } catch (e) {} d.remove();
-      if (was === 'yes') { document.cookie.split(';').forEach(c => { const n = c.split('=')[0].trim(); if (/^_ga/.test(n)) document.cookie = n + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=.' + location.hostname.replace(/^www\./, ''); }); location.reload(); }
+      if (was === 'yes2') { document.cookie.split(';').forEach(c => { const n = c.split('=')[0].trim(); if (/^(_ga|_fbp|_fbc)/.test(n)) document.cookie = n + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=.' + location.hostname.replace(/^www\./, ''); }); location.reload(); }
     };
     document.body.appendChild(d);
   };
   window.awConsent = banner; // footer link "Cookie-uri" reopens the choice
   const c = store.get('aw_consent');
-  if (c === 'yes') load();
+  if (c === 'yes2') load();
   else if (c !== 'no') {
     const go = () => setTimeout(banner, document.querySelector('script[src*="loader.js"]') ? 5200 : 600); // wait for the phone loader to finish
     document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', go) : go();
