@@ -46,6 +46,13 @@ form.addEventListener('submit', async e => {
     if (!r.ok || j.success === 'false' || j.success === false) throw new Error(j.message || r.status);
     form.hidden = true; okBox.hidden = false;
     if (G && !RM) G.from(okBox.children, { y: 30, opacity: 0, stagger: .1, duration: .8, ease: 'expo.out' });
-  } catch (x) { err.textContent = form.dataset.err; btn.disabled = false; label.textContent = was; }
+  } catch (x) {
+    // never lose an application: offer the same data as a ready-written email
+    const body = Object.entries(data).filter(([k]) => !k.startsWith('_')).map(([k, v]) => `${k}: ${v}`).join('\n');
+    err.innerHTML = '';
+    err.append(form.dataset.err + ' ');
+    const a = document.createElement('a'); a.href = `mailto:studioairwalk@gmail.com?subject=${encodeURIComponent(data._subject)}&body=${encodeURIComponent(body)}`;
+    a.textContent = form.dataset.mail; a.style.textDecoration = 'underline'; err.append(a);
+    btn.disabled = false; label.textContent = was; }
 });
 })();
