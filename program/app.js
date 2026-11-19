@@ -74,7 +74,8 @@ function inkFrame(rc) {
   const cxP = rc.x + rc.w / 2, cyP = rc.y + rc.h * .46, cxF = inkBox.x + inkBox.w / 2, cyF = inkBox.y + inkBox.h / 2;
   const sc = sPage + (1 - sPage) * lift;
   gsap.set(ink, { x: (cxP - cxF) * (1 - lift), y: (cyP - cyF) * (1 - lift), scale: sc, transformOrigin: '50% 50%' });
-  gsap.set(inside, { opacity: 1 });
+  gsap.set(inside, { opacity: stageST.progress > .4 ? 1 : 0 });   // the book's own frames lag behind the scroll; never show the label on the hero
+  gsap.set($('.k', ink), { opacity: S(print * 1.35, 0, 1) });
   const n = inkChars.length;
   inkChars.forEach((c, i) => {
     const pr = S(print * 1.35 - (i / n) * .35, 0, 1);               // printed letter by letter
@@ -107,7 +108,7 @@ async function initBook() {
 // the pin is created first (synchronously) so every later trigger is measured after its spacer
 const stageST = (!RM && cv) ? ScrollTrigger.create({ trigger: stage, pin: true, start: 'top top', end: () => '+=' + innerHeight * 5, scrub: true,
   onUpdate: s => { book && book.set(s.progress); stageProgress(s.progress); },
-  onLeave: () => { book && book.pause(); if (inkBox) { gsap.set(ink, { x: 0, y: 0, scale: 1 }); inkChars.forEach(c => gsap.set(c, { opacity: 1, filter: 'none', y: 0, rotationX: 0, z: 0 })); } },
+  onLeave: () => { book && book.pause(); if (inkBox) { gsap.set(ink, { x: 0, y: 0, scale: 1 }); gsap.set($('.k', ink), { opacity: 1 }); inkChars.forEach(c => gsap.set(c, { opacity: 1, filter: 'none', y: 0, rotationX: 0, z: 0 })); } },
   onEnterBack: () => book && book.play() }) : { progress: 0 };
 if (!RM && cv) stageProgress(0);
 const bookReady = initBook().catch(() => {
