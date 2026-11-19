@@ -40,7 +40,7 @@ $$('.mag').forEach(el => {
 });
 
 // ---------- nav ----------
-ScrollTrigger.create({ start: 80, onToggle: s => $('nav').classList.toggle('solid', s.isActive) });
+{ const nv = $('nav'), solid = () => nv.classList.toggle('solid', scrollY > 80); addEventListener('scroll', solid, { passive: true }); solid(); }
 
 // ---------- 3D book: hero -> the book opens -> the next heading is printed on its page and lifts off into the section ----------
 const stage = $('#stage'), cv = $('#book'), inside = $('.inside');
@@ -304,7 +304,7 @@ if (warpEl && TOUCH) {
 
 // ---------- footer: the book in a vortex of pages ----------
 const fcan = $('#fcan');
-if (fcan && window.AW && !RM && !TOUCH) {
+if (fcan && window.AW && !RM) {
   let foot = null;
   ScrollTrigger.create({ trigger: '#foot', start: 'top 160%', end: 'bottom top',
     onToggle: s => { if (!foot) { const fl = JSON.parse(fcan.dataset.fly), lp = pageTex('left');
