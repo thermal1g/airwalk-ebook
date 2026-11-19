@@ -443,3 +443,30 @@ footer{position:relative;overflow:hidden;background:radial-gradient(ellipse 70% 
 @media (hover:none){.mupi .fr img{filter:brightness(.6) saturate(.85)}}
 @media (prefers-reduced-motion:reduce){.mupi.lit .fr img{animation:none}.mupi.lit .gl:after{animation:none}}
 .who .ls:has(li.on) li:not(.on){color:#6f6c6a}
+
+/* section rail */
+.snav{position:fixed;z-index:150;left:clamp(14px,1.6vw,30px);top:50%;height:min(58vh,560px);width:16px;transform:translateY(-50%);opacity:0;transition:opacity .6s;pointer-events:none}
+.snav.show{opacity:1;pointer-events:auto}
+.snav-t{position:absolute;left:-14px;top:-16px;bottom:-16px;width:44px;background:none;border:0;cursor:pointer;z-index:1}
+.snav-tr{position:absolute;left:7px;top:0;bottom:0;width:2px;background:rgba(245,245,241,.14)}
+.snav-f{position:absolute;inset:0;background:var(--r);transform-origin:top;transform:scaleY(0);box-shadow:0 0 12px rgba(229,9,20,.6)}
+.snav ol{list-style:none;position:absolute;inset:0;z-index:2;pointer-events:none}
+.snav li{position:absolute;left:0;top:var(--p,0);transform:translateY(-50%)}
+.snav li a{display:flex;align-items:center;gap:10px;pointer-events:auto;text-decoration:none;color:inherit;padding:5px 0}
+.snav li a:before{content:'';flex:none;width:16px;height:2px;background:#4a4846;transition:background .3s,width .3s,height .3s}
+.snav li.done a:before{background:#F5F5F1}
+.snav li.on a:before{background:var(--r);height:4px;box-shadow:0 0 10px rgba(229,9,20,.8)}
+.snav li b{font:800 11px/1 G,sans-serif;font-stretch:151%;color:var(--r);opacity:0;transform:translateX(-8px);transition:opacity .25s,transform .35s}
+.snav li span{font:600 11px/1 G,sans-serif;font-stretch:120%;letter-spacing:.16em;text-transform:uppercase;color:#d9d6d2;white-space:nowrap;opacity:0;transform:translateX(-8px);transition:opacity .25s,transform .35s,color .2s}
+.snav li a:hover span,.snav li.on span{color:#fff}
+.snav-cur{position:absolute;left:20px;top:var(--p,0);transform:translateY(-50%);font:600 10px/1 G,sans-serif;font-stretch:120%;letter-spacing:.18em;text-transform:uppercase;color:#bdb9b5;white-space:pre;writing-mode:vertical-rl;transform:translateY(-50%) rotate(180deg);opacity:0;pointer-events:none;transition:opacity .3s,top .5s cubic-bezier(.2,.8,.2,1)}
+.snav-cur.in{opacity:1}
+.snav:before{content:'';position:absolute;left:calc(-1 * clamp(14px,1.6vw,30px));top:-12vh;bottom:-12vh;width:340px;background:linear-gradient(90deg,rgba(0,0,0,.92),rgba(0,0,0,.75) 55%,transparent);opacity:0;transition:opacity .35s;pointer-events:none}
+@media (hover:hover){.snav:hover:before,.snav:focus-within:before{opacity:1}.snav:hover li b,.snav:hover li span,.snav:focus-within li b,.snav:focus-within li span{opacity:1;transform:none}.snav:hover .snav-cur,.snav:focus-within .snav-cur{opacity:0}.snav:hover li:nth-child(n) b,.snav:hover li span{transition-delay:calc(var(--i,0)*0s)}}
+.snav.open:before{opacity:1}.snav.open li b,.snav.open li span{opacity:1;transform:none}.snav.open .snav-cur{opacity:0}
+.snav li a:focus-visible{outline:1px solid var(--r);outline-offset:4px}
+@media (max-width:900px){.snav{left:6px;height:52vh}.snav-t{left:-6px;width:26px}.snav li a:before{width:10px}.snav-cur{display:none}.snav li a{pointer-events:none}.snav.open li a{pointer-events:auto;padding:9px 0}.snav.open li span{font-size:12px}.snav:before{width:100vw;background:rgba(0,0,0,.94);top:-30vh;bottom:-30vh;left:-6px}}
+@media (prefers-reduced-motion:reduce){.snav *{transition:none!important}}
+/* keep the open list open while the mouse moves between names: the dark panel itself catches the hover */
+@media (hover:hover){.snav:hover:before,.snav:focus-within:before{pointer-events:auto}.snav li a{min-width:260px}
+.snav li b,.snav li span{transition:opacity .25s .12s,transform .35s .12s,color .2s}.snav:hover li b,.snav:hover li span{transition-delay:0s}}

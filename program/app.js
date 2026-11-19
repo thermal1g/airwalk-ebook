@@ -518,4 +518,52 @@ document.fonts && document.fonts.ready.then(() => ScrollTrigger.refresh());
 // videos play only while on screen
 { const vio = new IntersectionObserver(es => es.forEach(e => { const v = e.target; if (e.isIntersecting) { if (v.preload === 'none') v.preload = 'metadata'; v.play().catch(() => {}); } else v.pause(); }), { rootMargin: '200px 0px' });
   $$('video[autoplay]').forEach(v => { v.removeAttribute('autoplay'); v.pause(); vio.observe(v); }); }
+
+// ---------- section rail: page progress on the left, every section clickable ----------
+{
+  const RO = document.documentElement.lang === 'ro';
+  const L = RO ? { stage: 'Start', scurt: 'Pe scurt', cine: 'Pentru cine', pasi: 'Pașii', design: 'Designul', pagina: 'Pagina de vânzare', kit: 'Kitul de lansare', lansare: 'Ziua lansării', 'cine-face': 'Cine ce face', caz: 'Studiu de caz', faq: 'Întrebări', download: 'Prezentarea', contact: 'Contact' }
+               : { stage: 'Start', scurt: 'Overview', cine: 'Who it’s for', pasi: 'The steps', design: 'The design', pagina: 'Sales page', kit: 'Launch kit', lansare: 'Launch day', 'cine-face': 'Who does what', caz: 'Case study', faq: 'FAQ', download: 'The deck', contact: 'Contact' };
+  const secs = Object.keys(L).map(id => ({ id, el: document.getElementById(id), name: L[id] })).filter(s => s.el);
+  if (secs.length > 3) {
+    const nav = document.createElement('div'); nav.className = 'snav'; nav.setAttribute('role', 'navigation'); nav.setAttribute('aria-label', RO ? 'Secțiunile paginii' : 'Page sections');
+    nav.innerHTML = `<button class='snav-t' type='button' aria-label='${RO ? 'Arată secțiunile' : 'Show sections'}' aria-expanded='false'></button><div class='snav-tr'><i class='snav-f'></i></div><span class='snav-cur'></span><ol>` +
+      secs.map((s, i) => `<li><a href='#${s.id}'><b>${String(i + 1).padStart(2, '0')}</b><span>${s.name}</span></a></li>`).join('') + '</ol>';
+    document.body.appendChild(nav);
+    const fill = $('.snav-f', nav), cur = $('.snav-cur', nav), lis = $$('li', nav), tog = $('.snav-t', nav);
+    let tops = [], max = 1, act = -1;
+    const measure = () => {
+      max = Math.max(1, ScrollTrigger.maxScroll(window));
+      tops = secs.map(s => { const st = ScrollTrigger.create({ trigger: s.el, start: 'top top' }); const v = st.start; st.kill(); return Math.min(max, v); });
+      tops[0] = 0;
+      lis.forEach((li, i) => li.style.setProperty('--p', (i / (secs.length - 1) * 100).toFixed(2) + '%'));   // evenly spaced, so every name is readable
+      update();
+    };
+    const update = () => {
+      const y = lenis ? lenis.scroll : scrollY, n = secs.length - 1;
+      // the bar fills section by section: inside each section it moves from its mark to the next one
+      let k = 0; for (let i = 0; i < tops.length; i++) if (y >= tops[i]) k = i;
+      const nx = k < n ? tops[k + 1] : max, loc = nx > tops[k] ? Math.min(1, (y - tops[k]) / (nx - tops[k])) : 1;
+      fill.style.transform = `scaleY(${Math.min(1, (k + loc) / n)})`;
+      let a = 0; for (let i = 0; i < tops.length; i++) if (y >= tops[i] - innerHeight * .4) a = i;
+      if (a !== act) {
+        act = a; lis.forEach((li, i) => { li.classList.toggle('on', i === a); li.classList.toggle('done', i < a); });
+        cur.textContent = String(a + 1).padStart(2, '0') + '  ' + secs[a].name; cur.style.setProperty('--p', lis[a].style.getPropertyValue('--p'));
+        cur.classList.remove('in'); void cur.offsetWidth; cur.classList.add('in');
+      }
+      nav.classList.toggle('show', !document.getElementById('pre') || getComputedStyle(document.getElementById('pre')).display === 'none' || y > 10);
+    };
+    ScrollTrigger.addEventListener('refresh', measure); ScrollTrigger.refresh();
+    lenis ? lenis.on('scroll', update) : addEventListener('scroll', update, { passive: true });
+    setInterval(update, 800);
+    const go = i => {
+      const t = i === 0 ? 0 : tops[i] + 2;
+      lenis ? lenis.scrollTo(t, { duration: 1.4 }) : scrollTo({ top: t, behavior: 'smooth' });
+      nav.classList.remove('open'); tog.setAttribute('aria-expanded', 'false');
+    };
+    lis.forEach((li, i) => $('a', li).addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); go(i); if (e.detail) e.currentTarget.blur(); }));
+    tog.addEventListener('click', () => { const o = nav.classList.toggle('open'); tog.setAttribute('aria-expanded', o); });
+    document.addEventListener('pointerdown', e => { if (!nav.contains(e.target)) { nav.classList.remove('open'); tog.setAttribute('aria-expanded', 'false'); } });
+  }
+}
 })();
