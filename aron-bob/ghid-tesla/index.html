@@ -380,7 +380,7 @@ const buy=document.querySelector('.buy');buy.addEventListener('mousemove',e=>{co
 <script src="https://cdn.whop.com/elements/amber/elements.js" data-whop-elements></script>
 <script type="module">
 try{
- const c=window.WhopElements().checkout.create({plan:"plan_gcs7cNuzIH0az",returnUrl:"https://ebook.airwalk.ro/aron-bob/ghid-tesla/multumim/"});
+ const c=window.WhopElements().checkout.create({appearance:{theme:{appearance:"dark",accentColor:"red",grayColor:"gray"},classes:{"whop-CheckoutSummaryHead":{color:"#ffffff"},"whop-CheckoutSeller":{color:"#ffffff"},"whop-CheckoutDetailsToggle":{color:"#ffffff"},"whop-CheckoutPrice":{color:"#ffffff"},"whop-CheckoutTotal":{color:"#ffffff"},"whop-CheckoutPriceContext":{color:"#e8e6e3"},"whop-CheckoutPricingDetails":{color:"#e8e6e3"},"whop-CheckoutPromoRow":{color:"#ffffff"}}},plan:"plan_gcs7cNuzIH0az",returnUrl:"https://ebook.airwalk.ro/aron-bob/ghid-tesla/multumim/"});
  c.create("checkout").mount("#whop-checkout");
 }catch(e){document.getElementById("whop-checkout").innerHTML='<p><a class="btn" href="https://whop.com/checkout/plan_gcs7cNuzIH0az/">Cumpără ghidul</a></p>'}
 </script>
