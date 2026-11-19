@@ -40,11 +40,13 @@ form.addEventListener('submit', async e => {
   btn.disabled = true; label.textContent = form.dataset.sending;
   const data = Object.fromEntries(new FormData(form)); delete data.botcheck;
   data.subject = `${data.subject}: ${data.Nume} (${data.Platforma}, ${data.Urmaritori})`; data.replyto = data.Email;
+  data.Sursa = window.awSource ? window.awSource() : 'unknown';
   try {
     const r = await fetch(form.dataset.to, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) });
     const j = await r.json().catch(() => ({}));
     if (!r.ok || j.success !== true) throw new Error(j.message || r.status);
     form.hidden = true; okBox.hidden = false;
+    window.awTrack && window.awTrack('generate_lead', { form: 'aplicare' });
     if (G && !RM) G.from(okBox.children, { y: 30, opacity: 0, stagger: .1, duration: .8, ease: 'expo.out' });
   } catch (x) {
     // never lose an application: offer the same data as a ready-written email
