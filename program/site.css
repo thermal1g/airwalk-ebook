@@ -386,3 +386,10 @@ footer{position:relative;overflow:hidden;background:radial-gradient(ellipse 70% 
 .jfoot{display:flex;flex-wrap:wrap;gap:14px 34px;justify-content:space-between;padding:34px var(--pad);border-top:1px solid #1d1d1d;color:var(--m);font-size:14px}.jfoot a:hover{color:var(--w)}
 @media (max-width:900px){.jgrid{grid-template-columns:minmax(0,1fr)}.nx{position:static}}
 @media (max-width:640px){.fg{grid-template-columns:minmax(0,1fr)}.cr{grid-template-columns:auto minmax(0,1fr)}.yn{grid-column:1/-1;justify-self:start}.jhero h1{font-size:8.4vw}}
+
+/* loader: wireframe desk -> book -> writing -> fly-out */
+#pre.ld3d{background:#000}
+#pre .ldc,#pre .lds{position:absolute;inset:0;width:100%;height:100%;display:block}
+#pre .lds{pointer-events:none}
+#pre .ldskip{position:absolute;right:24px;bottom:22px;z-index:2;font:600 11px/1 G,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:#8a8682;background:none;border:0;padding:10px;cursor:pointer}
+#pre .ldskip:hover{color:#f5f5f1}

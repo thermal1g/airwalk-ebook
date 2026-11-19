@@ -140,6 +140,11 @@ const heroIn = () => {
 // ---------- preloader: process chart (5 bars rise like a stats chart, then exit as a curtain) ----------
 const pre = $('#pre');
 function runLoader() {
+  if (window.AWLoader) {
+    AWLoader.run({ pre, steps: JSON.parse(pre.dataset.steps), head: pre.dataset.head, ready: bookReady, frontUrl: cv && cv.dataset.front,
+      onExit: () => { lenis && lenis.start(); heroIn(); gsap.ticker.lagSmoothing(0); } });
+    return;
+  }
   const steps = JSON.parse(pre.dataset.steps), head = pre.dataset.head, tl = gsap.timeline({ paused: true });
   const tot = { v: 0 }; const pad = n => String(n).padStart(2, '0');
   pre.classList.add('v3');
@@ -239,7 +244,7 @@ const rv = $('.reveal-img');
 if (rv && matchMedia('(hover:hover)').matches) {
   const rx = gsap.quickTo(rv, 'x', { duration: .5, ease: 'power3' }), ry = gsap.quickTo(rv, 'y', { duration: .5, ease: 'power3' });
   $$('[data-img]').forEach(li => {
-    li.addEventListener('mouseenter', () => { $('img', rv).src = li.dataset.img; gsap.to(rv, { opacity: 1, scale: 1, rotate: gsap.utils.random(-6, 6), duration: .35 }); });
+    li.addEventListener('mouseenter', e => { $('img', rv).src = li.dataset.img; gsap.set(rv, { x: e.clientX + 140, y: e.clientY }); rx(e.clientX + 140); ry(e.clientY); gsap.to(rv, { opacity: 1, scale: 1, rotate: gsap.utils.random(-6, 6), duration: .35, overwrite: 'auto' }); });
     li.addEventListener('mouseleave', () => gsap.to(rv, { opacity: 0, scale: .8, duration: .3 }));
     li.addEventListener('mousemove', e => { rx(e.clientX + 140); ry(e.clientY); });
   });
