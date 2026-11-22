@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /aron-bob/ghid-tesla/multumim/
 Disallow: /aron-bob/tesla-guide/thank-you/
+Disallow: /oana-purcaru/corpul-pe-care-il-vrei/multumim/
 
 Sitemap: https://ebook.airwalk.ro/sitemap.xml

@@ -1,0 +1,297 @@
+/* Corpul pe care îl vrei · motion (GSAP + ScrollTrigger + Lenis), modelled on ebook.airwalk.ro.
+   Touch devices: native scrolling, no pins, horizontal sections become swipe carousels.
+   Reduced motion: no loader, no smooth scroll, no pins, content shown as is. */
+(() => {
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const H = document.documentElement;
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const TOUCH = matchMedia('(hover:none),(pointer:coarse)').matches;
+if (TOUCH) H.classList.add('touch');
+const wideQ = matchMedia('(min-width:1024px)');
+const PIN = () => !RM && !TOUCH && wideQ.matches;
+if (!PIN()) H.classList.add('nopin');
+
+const finishLoader = () => H.classList.add('done');
+setTimeout(finishLoader, 4500); // fail-safe: the loader never blocks the page
+
+/* ---------- things that work without GSAP ---------- */
+// sticky mobile CTA: after the hero, hidden while the buy section or the cookie banner is on screen
+const sticky = $('.sticky');
+if (sticky && 'IntersectionObserver' in window) {
+  let pastHero = false, atBuy = false, atFoot = false;
+  const upd = () => { const on = pastHero && !atBuy && !atFoot && !$('#awc'); sticky.classList.toggle('on', on); H.classList.toggle('has-sticky', on); };
+  new IntersectionObserver(([e]) => { pastHero = !e.isIntersecting && e.boundingClientRect.top < 0; upd(); }).observe($('.hero'));
+  new IntersectionObserver(([e]) => { atBuy = e.isIntersecting; upd(); }, { rootMargin: '0px 0px -10% 0px' }).observe($('#cumpara'));
+  new IntersectionObserver(([e]) => { atFoot = e.isIntersecting; upd(); }).observe($('.fcols'));
+  new MutationObserver(upd).observe(document.body, { childList: true });
+}
+// pains: tap / Enter toggles the answer on hover devices too
+$$('.pain').forEach(p => {
+  p.addEventListener('click', () => p.classList.toggle('open'));
+  p.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); p.classList.toggle('open'); } });
+});
+// program tabs (WAI-ARIA tabs with arrow keys)
+const tabs = $$('.ptabs [role=tab]');
+const selectTab = (t, focus) => {
+  tabs.forEach(b => { const on = b === t; b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1; $('#' + b.getAttribute('aria-controls')).hidden = !on; });
+  if (focus) t.focus(); clearFocus();
+  window.ScrollTrigger && ScrollTrigger.refresh();
+};
+tabs.forEach((t, i) => {
+  t.addEventListener('click', () => selectTab(t));
+  t.addEventListener('keydown', e => {
+    const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0; if (!d) return;
+    e.preventDefault(); selectTab(tabs[(i + d + tabs.length) % tabs.length], true);
+  });
+});
+// muscle map focus: days and legend items highlight their muscle groups
+const mm = $('.mm');
+const clearFocus = () => { if (!mm) return; mm.classList.remove('focus'); $$('.hi', mm).forEach(x => x.classList.remove('hi')); $$('.leg li.hi, .day.on').forEach(x => x.classList.remove('hi', 'on')); };
+const focusGroups = gs => {
+  clearFocus(); if (!gs.length) return;
+  mm.classList.add('focus');
+  gs.forEach(g => { $$(`[data-g="${g}"]`, mm).forEach(x => x.classList.add('hi')); const li = $(`.leg li[data-g="${g}"]`); li && li.classList.add('hi'); });
+};
+$$('.day').forEach(d => {
+  const gs = d.dataset.focus ? d.dataset.focus.split(',') : [];
+  const on = () => { focusGroups(gs); d.classList.add('on'); };
+  d.addEventListener('mouseenter', on); d.addEventListener('focus', on);
+  d.addEventListener('mouseleave', clearFocus); d.addEventListener('blur', clearFocus);
+  d.addEventListener('click', () => d.classList.contains('on') ? clearFocus() : on());
+});
+$$('.leg li').forEach(li => {
+  const on = () => focusGroups([li.dataset.g]);
+  li.addEventListener('mouseenter', on); li.addEventListener('focus', on);
+  li.addEventListener('mouseleave', clearFocus); li.addEventListener('blur', clearFocus);
+  li.addEventListener('click', on);
+});
+// statement: split into words (plain DOM, no plugin)
+$$('[data-fill]').forEach(el => { el.innerHTML = el.textContent.trim().split(/\s+/).map(w => `<span class="w">${w}</span>`).join(' '); });
+// native horizontal carousels: progress + coverflow tilt (touch / narrow)
+const chTrack = $('.chtrack');
+const setChProg = p => { const pr = $('.chprog'); if (!pr) return; pr.style.setProperty('--p', p); const n = Math.min(10, Math.max(1, Math.round(p * 9) + 1)); $('.cur-n', pr).textContent = String(n).padStart(2, '0'); };
+const nativeCarousels = () => {
+  if (chTrack) chTrack.addEventListener('scroll', () => setChProg(chTrack.scrollLeft / Math.max(1, chTrack.scrollWidth - chTrack.clientWidth)), { passive: true });
+};
+// FAQ: orbital carousel (cards on an arc, active one on top, its answer in the middle)
+{ const orb = $('.orb');
+  if (orb) {
+    const cards = $$('.oc', orb), ans = $$('.oa', orb), dots = $$('.od', orb), n = cards.length;
+    let cur = 0, timer = 0, user = false, inView = false;
+    const place = () => {
+      const w = orb.clientWidth, R = Math.max(360, w * .62), cw = cards[0].offsetWidth, step = Math.min(30, ((cw + (w < 600 ? -40 : 26)) / R) * 180 / Math.PI);
+      cards.forEach((c, i) => {
+        let d = i - cur; d = ((d % n) + n * 1.5) % n - n / 2;
+        const a = d * step * Math.PI / 180, x = Math.sin(a) * R, y = (1 - Math.cos(a)) * R;
+        const far = Math.abs(d);
+        c.style.transform = `translate(-50%,0) translate(${x.toFixed(1)}px,${y.toFixed(1)}px) rotate(${(d * step).toFixed(1)}deg) scale(${(1 - Math.min(far, 3) * .07).toFixed(3)})`;
+        c.style.opacity = far > 3.2 ? 0 : (1 - far * .2).toFixed(2);
+        c.style.zIndex = 10 - Math.round(far);
+        c.classList.toggle('on', d === 0); c.tabIndex = far > 3.2 ? -1 : 0;
+        c.setAttribute('aria-current', d === 0 ? 'true' : 'false');
+      });
+      ans.forEach((x, i) => x.hidden = i !== cur);
+      dots.forEach((x, i) => x.setAttribute('aria-current', i === cur ? 'true' : 'false'));
+      $('.onum b', orb).textContent = String(cur + 1).padStart(2, '0');
+    };
+    const go = (i, byUser) => { cur = (i + n) % n; if (byUser) { user = true; clearInterval(timer); } place();
+      const a = $('.oa:not([hidden])', orb); if (a && !RM) a.animate([{ opacity: 0, transform: 'translateY(12px)' }, { opacity: 1, transform: 'none' }], { duration: 450, easing: 'cubic-bezier(.2,.7,.2,1)' }); };
+    cards.forEach((c, i) => c.addEventListener('click', () => go(i, true)));
+    dots.forEach((d, i) => d.addEventListener('click', () => go(i, true)));
+    $('.op', orb).addEventListener('click', () => go(cur - 1, true));
+    $('.onx', orb).addEventListener('click', () => go(cur + 1, true));
+    orb.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { e.preventDefault(); go(cur + 1, true); $('.oc.on', orb).focus(); } if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1, true); $('.oc.on', orb).focus(); } });
+    const auto = () => { clearInterval(timer); if (RM || user || !inView) return; timer = setInterval(() => go(cur + 1), 6500); };
+    orb.addEventListener('pointerenter', () => clearInterval(timer)); orb.addEventListener('pointerleave', auto);
+    orb.addEventListener('focusin', () => clearInterval(timer));
+    new IntersectionObserver(([e]) => { inView = e.isIntersecting; auto(); }, { threshold: .4 }).observe(orb);
+    new ResizeObserver(place).observe(orb); place();
+  }
+}
+
+// analytics: which CTA leads to the buy section (fires only after cookie consent; awTrack is a no-op before)
+$$('a[href="#cumpara"]').forEach((a, i) => a.addEventListener('click', () => window.awTrack && awTrack('cta_click', { placement: a.closest('section,header,.sticky')?.className.split(' ')[0] || 'sticky', index: i })));
+
+/* ---------- without GSAP: stop here, page fully usable ---------- */
+if (!window.gsap || !window.ScrollTrigger) { H.classList.add('no-gsap'); finishLoader(); if (!PIN()) nativeCarousels(); return; }
+gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ ignoreMobileResize: true });
+if (!PIN()) nativeCarousels();
+
+// ---------- smooth scroll (desktop pointer only) ----------
+let lenis = null;
+if (!RM && !TOUCH && window.Lenis) {
+  lenis = new Lenis({ lerp: .09, wheelMultiplier: 1 });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(500, 33);
+  H.classList.add('lenis');
+}
+$$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+  const id = a.getAttribute('href'); if (id.length < 2) return;
+  const t = $(id); if (!t) return; e.preventDefault();
+  lenis ? lenis.scrollTo(t, { offset: id === '#top' ? 0 : -70, duration: 1.4 }) : t.scrollIntoView({ behavior: RM ? 'auto' : 'smooth' });
+  history.replaceState(null, '', id);
+}));
+
+// ---------- cursor + magnetic ----------
+const cur = $('.cur'), dot = $('.cdot');
+if (cur && matchMedia('(hover:hover) and (pointer:fine)').matches && !RM) {
+  const xc = gsap.quickTo(cur, 'x', { duration: .45, ease: 'power3' }), yc = gsap.quickTo(cur, 'y', { duration: .45, ease: 'power3' });
+  const xd = gsap.quickTo(dot, 'x', { duration: .08 }), yd = gsap.quickTo(dot, 'y', { duration: .08 });
+  addEventListener('pointermove', e => { xc(e.clientX); yc(e.clientY); xd(e.clientX); yd(e.clientY); });
+  document.addEventListener('mouseleave', () => { cur.classList.add('hide'); dot.classList.add('hide'); });
+  document.addEventListener('mouseenter', () => { cur.classList.remove('hide'); dot.classList.remove('hide'); });
+  $$('[data-cur]').forEach(el => {
+    el.addEventListener('mouseenter', () => { cur.classList.add('on'); $('span', cur).textContent = el.dataset.cur; });
+    el.addEventListener('mouseleave', () => cur.classList.remove('on'));
+  });
+  $$('a,button,summary,[tabindex="0"]').forEach(el => { if (el.dataset.cur) return;
+    el.addEventListener('mouseenter', () => gsap.to(cur, { scale: 1.5, duration: .3 })); el.addEventListener('mouseleave', () => gsap.to(cur, { scale: 1, duration: .3 })); });
+  $$('.mag').forEach(el => {
+    const xs = gsap.quickTo(el, 'x', { duration: .6, ease: 'elastic.out(1,.4)' }), ys = gsap.quickTo(el, 'y', { duration: .6, ease: 'elastic.out(1,.4)' });
+    el.addEventListener('mousemove', e => { const r = el.getBoundingClientRect(); xs((e.clientX - r.left - r.width / 2) * .3); ys((e.clientY - r.top - r.height / 2) * .3); });
+    el.addEventListener('mouseleave', () => { xs(0); ys(0); });
+  });
+} else if (cur) { cur.remove(); dot.remove(); }
+
+// ---------- nav ----------
+{ const nv = $('.nav'), solid = () => nv.classList.toggle('solid', scrollY > 60); addEventListener('scroll', solid, { passive: true }); solid(); }
+
+/* ---------- reduced motion: no reveals, only the interactions above ---------- */
+if (RM) { finishLoader(); return; }
+
+// ---------- loader -> hero intro ----------
+const intro = gsap.timeline({ paused: true, defaults: { ease: 'power4.out' } });
+intro.from('.ht .ln', { yPercent: 55, opacity: 0, rotate: 2.5, duration: 1.1, stagger: .12 })
+  .from('.hero .tag', { y: 20, opacity: 0, duration: .7 }, '<.1')
+  .from('.hpanel', { clipPath: 'polygon(100% 0,100% 0,100% 100%,100% 100%)', duration: 1.2, ease: 'expo.inOut' }, 0)
+  .from('.hcut', { y: 90, opacity: 0, scale: .96, duration: 1.3 }, .25)
+  .from('.book', { x: -80, y: 40, rotate: -14, opacity: 0, duration: 1.2 }, .55)
+  .from('.hbadge', { scale: 0, rotate: -120, duration: 1, ease: 'back.out(1.7)' }, .8)
+  .from('.hl, .hcta > *, .hstats li', { y: 26, opacity: 0, duration: .8, stagger: .07 }, .5)
+  .from('.hsh.s2, .hsh.s3', { xPercent: 30, opacity: 0, duration: 1.4 }, 0)
+  .from('.htri, .hero .dg', { scale: 0, opacity: 0, duration: .8, stagger: .08, ease: 'back.out(2)' }, .7)
+  .from('.nav', { y: -30, opacity: 0, duration: .8 }, .4);
+
+const lt = gsap.timeline({ onComplete: () => { finishLoader(); } });
+const cnt = { v: 0 }, lc = $('.loader .lc b'), bar = $('.loader .lbar i');
+lt.to(cnt, { v: 100, duration: 1.15, ease: 'power2.inOut', onUpdate: () => { lc.textContent = Math.round(cnt.v); bar.style.width = cnt.v + '%'; } })
+  .to('.loader .lw, .loader .lbar', { opacity: 0, y: -20, duration: .35 })
+  .to('.loader .ls1', { yPercent: -105, duration: .8, ease: 'expo.inOut' }, '<.05')
+  .to('.loader .ls2', { yPercent: 105, duration: .8, ease: 'expo.inOut' }, '<')
+  .add(() => intro.play(), '<.25');
+lt.pause();
+const startLoader = () => lt.play();
+document.fonts && document.fonts.ready ? document.fonts.ready.then(startLoader) : startLoader();
+
+// hero scroll parallax + book tilt
+const hs = { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true };
+gsap.to('.hcut', { yPercent: -8, ease: 'none', scrollTrigger: hs });
+gsap.to('.hpanel', { yPercent: 10, ease: 'none', scrollTrigger: hs });
+gsap.to('.book', { yPercent: -45, rotate: 8, ease: 'none', scrollTrigger: hs });
+gsap.to('.hsh.s2', { xPercent: 8, ease: 'none', scrollTrigger: hs });
+gsap.to('.htxt', { yPercent: 14, opacity: .2, ease: 'none', scrollTrigger: { ...hs, start: '30% top' } });
+const bk = $('.bk');
+if (bk && !TOUCH) {
+  const rx = gsap.quickTo(bk, 'rotationX', { duration: .6, ease: 'power3' }), ry = gsap.quickTo(bk, 'rotationY', { duration: .6, ease: 'power3' });
+  gsap.set(bk, { rotationY: 24, rotationX: 4, rotationZ: -4, transition: 'none' });
+  $('.hero').addEventListener('pointermove', e => { const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5; ry(24 + x * 26); rx(4 - y * 18); });
+  $('.hero').addEventListener('pointerleave', () => { ry(24); rx(4); });
+}
+
+// ---------- marquee driven by scroll velocity ----------
+{ const mt = $('.mt'); mt.innerHTML += mt.innerHTML;
+  const tw = gsap.to(mt, { xPercent: -50, ease: 'none', duration: 38, repeat: -1 });
+  let dir = 1;
+  ScrollTrigger.create({ onUpdate: s => { dir = s.direction; const v = Math.min(Math.abs(s.getVelocity()) / 300, 5);
+    gsap.to(tw, { timeScale: dir * (1 + v), duration: .25, overwrite: true }); gsap.to(tw, { timeScale: dir, duration: 1.2, delay: .25 }); } });
+}
+
+// ---------- section heads ----------
+$$('.sh').forEach(sh => {
+  const k = $('.k', sh), h = $('h2', sh), rest = $$('.intro, .btn', sh);
+  const tl = gsap.timeline({ scrollTrigger: { trigger: sh, start: 'top 85%' } });
+  if (k) tl.from(k, { x: -30, opacity: 0, duration: .7, ease: 'power3.out' });
+  if (h) tl.from(h, { y: 46, opacity: 0, duration: 1, ease: 'power4.out' }, '<.08');
+  if (rest.length) tl.from(rest, { y: 24, opacity: 0, duration: .8, stagger: .08, ease: 'power3.out' }, '<.2');
+});
+
+// ---------- statement word fill ----------
+$$('[data-fill]').forEach(el => gsap.to($$('.w', el), { opacity: 1, stagger: .1, ease: 'none', scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 50%', scrub: true } }));
+gsap.from('.stmt .tag, .stmt .sign', { y: 24, opacity: 0, duration: .8, stagger: .15, scrollTrigger: { trigger: '.stmt', start: 'top 75%' } });
+
+// ---------- pains ----------
+gsap.from('.pain', { y: 70, opacity: 0, rotate: 1.5, duration: 1, stagger: .1, ease: 'power3.out', scrollTrigger: { trigger: '.pgrid', start: 'top 85%' } });
+
+// ---------- chapters: pinned horizontal scroll on desktop ----------
+const mmq = gsap.matchMedia();
+mmq.add({ pin: '(min-width:1024px) and (hover:hover) and (pointer:fine)' }, ctx => {
+  if (!ctx.conditions.pin) return;
+  H.classList.remove('nopin');
+  const dist = () => Math.max(0, chTrack.scrollWidth - innerWidth);
+  const tw = gsap.to(chTrack, { x: () => -dist(), ease: 'none',
+    scrollTrigger: { trigger: '.chpin', pin: true, start: 'top top', end: () => '+=' + dist(), scrub: 1, invalidateOnRefresh: true, onUpdate: s => setChProg(s.progress) } });
+  $$('.chc', chTrack).forEach(c => {
+    const img = $('.chi img', c);
+    if (img) gsap.fromTo(img, { xPercent: -6 }, { xPercent: 6, ease: 'none', scrollTrigger: { trigger: c, containerAnimation: tw, start: 'left right', end: 'right left', scrub: true } });
+    gsap.from($$('.cht > *', c), { y: 30, opacity: 0, stagger: .06, duration: .7, ease: 'power3.out', scrollTrigger: { trigger: c, containerAnimation: tw, start: 'left 85%' } });
+  });
+  return () => { H.classList.add('nopin'); gsap.set(chTrack, { clearProps: 'transform' }); };
+});
+mmq.add('(max-width:1023px), (hover:none), (pointer:coarse)', () => {
+  gsap.from('.chc', { y: 50, opacity: 0, stagger: .08, duration: .8, ease: 'power3.out', scrollTrigger: { trigger: '.chtrack', start: 'top 85%' } });
+});
+$$('.lens').forEach(l => gsap.from(l, { y: 90, opacity: 0, scale: .94, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: l, start: 'top 85%' } }));
+
+// ---------- programs ----------
+gsap.from('.ptabs button', { y: 24, opacity: 0, stagger: .07, duration: .7, scrollTrigger: { trigger: '.ptabs', start: 'top 88%' } });
+gsap.from('.mmw', { y: 60, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.pcols', start: 'top 85%' } });
+gsap.fromTo('.mm polygon[data-g]', { opacity: 0 }, { opacity: 1, duration: .5, stagger: { each: .006, from: 'random' }, clearProps: 'opacity', scrollTrigger: { trigger: '.mm', start: 'top 80%' } });
+gsap.from('#pp1 .day', { x: -30, opacity: 0, stagger: .1, duration: .8, ease: 'power3.out', scrollTrigger: { trigger: '.ppanels', start: 'top 85%' } });
+
+// ---------- results ----------
+const countUp = (el) => {
+  const raw = el.textContent, m = raw.match(/([−-]?)(\d+(?:,\d+)?)/); if (!m) return;
+  const dec = (m[2].split(',')[1] || '').length, to = parseFloat(m[2].replace(',', '.')), o = { v: 0 };
+  gsap.to(o, { v: to, duration: 1.8, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 88%' },
+    onUpdate: () => el.textContent = raw.replace(m[0], m[1] + o.v.toFixed(dec).replace('.', ',')) });
+};
+$$('.rzf .big').forEach(countUp);
+$$('[data-count]').forEach(countUp);
+gsap.from('.rzf', { y: 80, opacity: 0, duration: 1.1, stagger: .15, ease: 'power3.out', scrollTrigger: { trigger: '.rzfeat', start: 'top 85%' } });
+gsap.from('.rzf .ri img', { scale: 1.15, duration: 1.6, ease: 'power3.out', scrollTrigger: { trigger: '.rzfeat', start: 'top 85%' } });
+
+// ---------- quote ----------
+{ const qt = $('.qt'); const parts = [];
+  qt.childNodes.forEach(n => { if (n.nodeType === 3) n.textContent.split(/(\s+)/).forEach(w => parts.push(w.trim() ? `<span class="qw">${w}</span>` : w)); else parts.push(`<span class="qw">${n.outerHTML}</span>`); });
+  qt.innerHTML = parts.join('');
+  gsap.set('.qw', { display: 'inline-block' });
+  gsap.from('.qw', { y: 40, opacity: 0, filter: 'blur(8px)', duration: .9, stagger: .035, ease: 'power3.out', scrollTrigger: { trigger: qt, start: 'top 80%' } });
+  gsap.fromTo('.quote .qm', { yPercent: 20, rotate: -8 }, { yPercent: -20, rotate: 4, ease: 'none', scrollTrigger: { trigger: '.quote', start: 'top bottom', end: 'bottom top', scrub: true } });
+  gsap.from('.quote .sign', { y: 20, opacity: 0, duration: .8, scrollTrigger: { trigger: qt, start: 'bottom 85%' } });
+}
+
+// ---------- about ----------
+gsap.from('.abimg', { clipPath: 'inset(100% 0 0 0)', duration: 1.4, ease: 'expo.inOut', scrollTrigger: { trigger: '.abg', start: 'top 80%' } });
+gsap.fromTo('.abimg img', { yPercent: -10 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '.about', start: 'top bottom', end: 'bottom top', scrub: true } });
+gsap.from('.abt > *', { y: 30, opacity: 0, duration: .8, stagger: .08, ease: 'power3.out', scrollTrigger: { trigger: '.abt', start: 'top 80%' } });
+
+// ---------- buy ----------
+gsap.from('.bt > *', { y: 36, opacity: 0, duration: .9, stagger: .08, ease: 'power3.out', scrollTrigger: { trigger: '.bgrid', start: 'top 80%' } });
+gsap.from('.inc li', { x: -30, opacity: 0, duration: .7, stagger: .08, scrollTrigger: { trigger: '.inc', start: 'top 85%' } });
+gsap.from('.ck', { y: 90, rotate: 3, opacity: 0, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: '.bgrid', start: 'top 75%' } });
+gsap.to('.hsh.b1', { xPercent: -6, ease: 'none', scrollTrigger: { trigger: '.buy', start: 'top bottom', end: 'bottom top', scrub: true } });
+
+// ---------- faq ----------
+gsap.from('.orb-ring', { y: 120, opacity: 0, scale: .9, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: '.orb', start: 'top 80%' } });
+gsap.from('.orb-mid, .orb-ctl, .fqcta', { y: 30, opacity: 0, duration: .9, stagger: .1, scrollTrigger: { trigger: '.orb', start: 'top 70%' } });
+
+// ---------- footer ----------
+gsap.fromTo('.fbig span:first-child', { xPercent: -6 }, { xPercent: 2, ease: 'none', scrollTrigger: { trigger: '.foot', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+gsap.fromTo('.fbig span:last-child', { xPercent: 6 }, { xPercent: -2, ease: 'none', scrollTrigger: { trigger: '.foot', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+gsap.from('.fcols > div', { y: 30, opacity: 0, duration: .8, stagger: .1, scrollTrigger: { trigger: '.fcols', start: 'top 95%' } });
+
+// recalc once fonts and images are in
+addEventListener('load', () => ScrollTrigger.refresh());
+document.fonts && document.fonts.ready.then(() => ScrollTrigger.refresh());
+})();
