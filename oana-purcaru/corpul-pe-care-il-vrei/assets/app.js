@@ -237,6 +237,11 @@ if (bk && !TOUCH) {
   gsap.set(bk, { rotationY: 24, rotationX: 4, rotationZ: -4, transition: 'none' });
   $('.hero').addEventListener('pointermove', e => { const x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5; ry(24 + x * 26); rx(4 - y * 18); });
   $('.hero').addEventListener('pointerleave', () => { ry(24); rx(4); });
+  // the brand panel behind Oana tilts toward the cursor too
+  const hp = $('.hpanel'); if (hp) { gsap.set(hp, { transformPerspective: 1200, transformOrigin: '50% 60%' });
+    const px = gsap.quickTo(hp, 'rotationY', { duration: .9, ease: 'power3' }), py = gsap.quickTo(hp, 'rotationX', { duration: .9, ease: 'power3' });
+    $('.hero').addEventListener('pointermove', e => { px((e.clientX / innerWidth - .5) * 10); py(-(e.clientY / innerHeight - .5) * 8); });
+    $('.hero').addEventListener('pointerleave', () => { px(0); py(0); }); }
 }
 
 // ---------- marquee driven by scroll velocity ----------
