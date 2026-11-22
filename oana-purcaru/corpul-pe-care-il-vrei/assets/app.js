@@ -237,13 +237,13 @@ document.fonts && document.fonts.ready ? document.fonts.ready.then(startLoader) 
 
 // hero scroll parallax + book tilt
 const hs = { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true };
-gsap.to('.hcut', { yPercent: -8, ease: 'none', scrollTrigger: hs });
-gsap.to('.hpanel', { yPercent: 10, ease: 'none', scrollTrigger: hs });
-gsap.to('.book', { yPercent: -45, rotate: 8, ease: 'none', scrollTrigger: hs });
-gsap.to('.hsh.s2', { xPercent: 8, ease: 'none', scrollTrigger: hs });
-gsap.to('.hshards .g-l', { y: -14, ease: 'none', scrollTrigger: hs });
-gsap.to('.hshards .g-r', { y: 10, ease: 'none', scrollTrigger: hs });
-gsap.to('.hshards .g-tr', { y: 6, x: 3, ease: 'none', scrollTrigger: hs });
+gsap.fromTo('.hcut', { yPercent: 0 }, { yPercent: -8, ease: 'none', immediateRender: false, scrollTrigger: hs });
+gsap.fromTo('.hpanel', { yPercent: 0 }, { yPercent: 10, ease: 'none', immediateRender: false, scrollTrigger: hs });
+gsap.fromTo('.book', { yPercent: 0, rotate: 0 }, { yPercent: -45, rotate: 8, ease: 'none', immediateRender: false, scrollTrigger: hs });
+gsap.fromTo('.hsh.s2', { xPercent: 0 }, { xPercent: 8, ease: 'none', immediateRender: false, scrollTrigger: hs });
+gsap.fromTo('.hshards .g-l', { y: 0 }, { y: -14, ease: 'none', immediateRender: false, scrollTrigger: hs });
+gsap.fromTo('.hshards .g-r', { y: 0 }, { y: 10, ease: 'none', immediateRender: false, scrollTrigger: hs });
+gsap.fromTo('.hshards .g-tr', { y: 0, x: 0 }, { y: 6, x: 3, ease: 'none', immediateRender: false, scrollTrigger: hs });
 gsap.to('.htxt', { yPercent: 14, opacity: .2, ease: 'none', scrollTrigger: { ...hs, start: '30% top' } });
 const bk = $('.bk');
 if (bk && !TOUCH) {

@@ -806,8 +806,8 @@ html body #awc{transition:opacity .6s .3s,visibility .6s .3s}
 .snav li span{font:700 11px/1 A,sans-serif;font-stretch:118%;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.72);white-space:nowrap;opacity:0;transform:translateX(-8px);transition:opacity .25s .12s,transform .35s .12s,color .2s}
 .snav li a:hover span,.snav li.on span{color:#fff}
 .snav li a:hover:before{width:22px}
-.snav-cur{position:absolute;left:20px;top:var(--p,0);font:700 10px/1 A,sans-serif;font-stretch:118%;letter-spacing:.16em;text-transform:uppercase;color:var(--fg2,#999);white-space:pre;writing-mode:vertical-rl;transform:translateY(-50%) rotate(180deg);opacity:0;pointer-events:none;mix-blend-mode:difference;filter:grayscale(1)}
-.snav-cur.in{opacity:.85;transition:opacity .5s .1s}
+.snav-cur{position:absolute;left:22px;top:var(--p,0);font:700 11px/1 A,sans-serif;font-stretch:118%;letter-spacing:.16em;text-transform:uppercase;color:#fff;text-shadow:0 0 2px rgba(0,0,0,.55),0 1px 8px rgba(0,0,0,.45);white-space:pre;writing-mode:vertical-rl;transform:translateY(-50%) rotate(180deg);opacity:0;pointer-events:none}
+.snav-cur.in{opacity:1;transition:opacity .5s .1s}
 .snav:before{content:'';position:absolute;left:calc(-1 * clamp(12px,1.5vw,28px));top:-12vh;bottom:-12vh;width:380px;background:linear-gradient(90deg,var(--darkest) 0%,color-mix(in srgb,var(--darkest) 94%,transparent) 62%,transparent);opacity:0;transition:opacity .35s;pointer-events:none}
 @media (hover:hover){
 .snav:hover:before,.snav:focus-within:before{opacity:1;pointer-events:auto}
