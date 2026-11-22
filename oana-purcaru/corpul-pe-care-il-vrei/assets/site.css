@@ -76,7 +76,7 @@ html,main>section,.foot{overflow-x:clip}
 .loader .lline i{position:absolute;inset:0;transform-origin:left;transform:scaleX(0);background:linear-gradient(90deg,var(--main),var(--hi) 70%,var(--lime,var(--hi)))}
 .loader .lpct{font:700 11.5px/1 A;font-stretch:118%;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.7);white-space:nowrap}
 @media (max-width:599px){.loader .lmid{flex-direction:column;gap:14px;text-align:center}.loader .lname{align-items:center}.loader .lfoot{bottom:5vh;gap:12px}.loader .lpct{display:none}}
-.done .loader{display:none}
+.done .loader,.seen .loader{display:none}
 
 /* ---------- cursor ---------- */
 .cur,.cdot{display:none}

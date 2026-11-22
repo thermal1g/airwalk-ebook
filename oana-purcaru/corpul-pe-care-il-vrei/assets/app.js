@@ -12,7 +12,7 @@ const PIN = () => !RM && !TOUCH && wideQ.matches;
 if (!PIN()) H.classList.add('nopin');
 
 const finishLoader = () => H.classList.add('done');
-setTimeout(finishLoader, 6500); // fail-safe: the loader never blocks the page
+setTimeout(finishLoader, 3000); // fail-safe: the loader never blocks the page
 
 /* ---------- things that work without GSAP ---------- */
 // sticky mobile CTA: after the hero, hidden while the buy section or the cookie banner is on screen
@@ -232,8 +232,15 @@ lt.from('.loader .lp1', { xPercent: -100, duration: .7, ease: 'expo.out' }, 0)
   .to('.loader .lp2', { yPercent: 105, duration: .85, ease: 'expo.inOut' }, '<')
   .add(() => intro.play(), '<.3');
 lt.pause();
-const startLoader = () => lt.play();
-document.fonts && document.fonts.ready ? document.fonts.ready.then(startLoader) : startLoader();
+// loader: first visit only, about 1.2 s (Alexandru, 22 Nov 2026, for mobile LCP); return visits go straight to the hero intro
+if (H.classList.contains('seen')) { lt.kill(); finishLoader(); intro.play(); }
+else {
+  try { localStorage.setItem('op-seen', '1'); } catch (e) {}
+  lt.timeScale(2.6);
+  let go = false; const startLoader = () => { if (!go) { go = true; lt.play(); } };
+  document.fonts && document.fonts.ready ? document.fonts.ready.then(startLoader) : startLoader();
+  setTimeout(startLoader, 400); // never wait long for fonts
+}
 
 // hero scroll parallax + book tilt
 const hs = { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true };
