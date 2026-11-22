@@ -721,3 +721,5 @@ a.tl:hover::after,a.tl:focus-visible::after{transform:translate(2px,-3px);opacit
 .ff .fbar{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 26px;margin-top:40px;padding-top:22px;width:100%;border-top:1px solid rgba(255,255,255,.1);font-size:12.5px;opacity:.85}
 .ff .totop{font-weight:700;transition:color .25s}.ff .totop:hover{color:var(--accdark)}
 @media (max-width:767px){.ff .fcols{grid-template-columns:1fr;gap:26px}#fcan{opacity:.5}.ff .ctas .btn{flex:1 1 100%}}
+.pain .pq{padding:2px 9px 0;border-radius:6px;background:rgba(0,0,0,.42);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);line-height:1.05}
+.schud{color:rgba(255,255,255,.85)}
