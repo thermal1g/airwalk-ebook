@@ -145,6 +145,10 @@ if (!window.gsap || !window.ScrollTrigger) { H.classList.add('no-gsap'); finishL
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ ignoreMobileResize: true });
 if (!PIN()) nativeCarousels();
+// GSAP folds the CSS `translate` of the hero cut-out into pixels; keep the centring in percent instead
+{ const hm = gsap.matchMedia();
+  hm.add('(max-width:1023px)', () => { gsap.set('.hcut', { x: 0, xPercent: -50 }); });
+  hm.add('(min-width:1024px)', () => { gsap.set('.hcut', { x: 0, xPercent: -46 }); }); }
 
 // ---------- smooth scroll (desktop pointer only) ----------
 let lenis = null;
@@ -340,6 +344,15 @@ gsap.fromTo('.progs.tx-slash', { '--t': 1 }, { '--t': 0, ease: 'none', scrollTri
 gsap.fromTo('.quote', { '--t': 0 }, { '--t': 1, ease: 'none', scrollTrigger: { trigger: '.quote', start: 'top 95%', end: 'top 30%', scrub: true } });
 // 4. about -> buy: the offer opens as an iris from the top edge
 gsap.fromTo('.buy', { '--t': 0 }, { '--t': 1, ease: 'none', scrollTrigger: { trigger: '.buy', start: 'top bottom', end: 'top 20%', scrub: true } });
+
+// decor: every guide shape inside a section drifts at its own speed; triangles also turn
+$$('.dz .dk').forEach(el => { const sp = +el.dataset.sp || .5, sec = el.closest('section,footer');
+  gsap.fromTo(el, { y: 140 * sp, rotate: el.tagName === 'svg' ? -40 * sp : 0 }, { y: -140 * sp, rotate: el.tagName === 'svg' ? 60 * sp : 0, ease: 'none', scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: true } }); });
+// fixed gutter layer: pinned to the screen, pieces drift slowly with the whole page
+$$('.fx .dk').forEach(el => { const sp = +el.dataset.sp || 1;
+  gsap.fromTo(el, { y: 0 }, { y: -260 * sp, rotate: el.tagName === 'svg' ? 220 * sp : 0, ease: 'none', scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: .6 } }); });
+// quote: keywords get a dark wipe, one after another
+{ const ems = $$('.qt em'); ScrollTrigger.create({ trigger: '.qt', start: 'top 62%', once: true, onEnter: () => ems.forEach((e, i) => setTimeout(() => e.classList.add('on'), 500 + i * 380)) }); }
 
 // seams: the guide's triangles drift and turn, slashes draw in, dots float, all tied to scroll
 $$('.seam').forEach((sm, i) => {
