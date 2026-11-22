@@ -86,8 +86,8 @@ html,main>section,.foot{overflow-x:clip}
 .brand b{font-weight:900;color:var(--accdark)}
 .nav nav{display:flex;gap:28px}
 .nav nav a{font-size:14.5px;font-weight:600;text-decoration:none;opacity:.82;position:relative;padding:6px 0}
-.nav nav a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:2px;background:var(--accdark);transition:right .35s}
-.nav nav a:hover{opacity:1}.nav nav a:hover::after{right:0}
+.nav nav a::before{content:"";position:absolute;left:50%;top:-6px;width:6px;height:6px;margin-left:-3px;background:var(--accdark);clip-path:polygon(50% 100%,0 0,100% 0);transform:translateY(-6px);opacity:0;transition:transform .35s cubic-bezier(.2,.7,.2,1),opacity .25s}
+.nav nav a{transition:opacity .25s,color .25s}.nav nav a:hover{opacity:1;color:var(--accdark)}.nav nav a:hover::before{transform:none;opacity:1}
 @media (max-width:1023px){.nav nav{display:none}}
 @media (max-width:599px){.nav{padding:14px 20px}.nav.solid{padding:10px 20px}.brand{font-size:13px}}
 
@@ -110,7 +110,7 @@ html,main>section,.foot{overflow-x:clip}
 .hstats li{display:flex;flex-direction:column;gap:6px}
 .hstats b{font:400 44px/1 N;color:#fff}
 .hstats span{font-size:12.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;opacity:.72;max-width:140px;line-height:1.3}
-.hvis{position:relative;height:min(84vh,820px);min-height:520px}
+.hvis{position:relative;height:clamp(480px,calc(100svh - 170px),800px);align-self:start}
 .hpanel{position:absolute;inset:8% 4% 0 10%;background:var(--main);clip-path:polygon(18% 0,100% 0,100% 100%,0 100%);opacity:.95}
 .hcut{position:absolute;left:50%;bottom:0;height:100%;width:auto;max-width:none;translate:-46% 0;filter:drop-shadow(0 30px 40px rgba(0,0,0,.35))}
 .book{position:absolute;left:-2%;bottom:6%;width:clamp(150px,15vw,230px);perspective:1100px;z-index:3}
@@ -697,5 +697,27 @@ a.tl:hover::after,a.tl:focus-visible::after{transform:translate(2px,-3px);opacit
 @media (max-width:599px){.sccall .col{font-size:10.5px;padding:4px 6px}}
 
 /* hero book in 3D (same model as the Airwalk programme hero); the CSS book stays as the fallback */
-.book canvas.b3{position:absolute;left:-60%;top:-30%;width:220%;height:160%;pointer-events:none;z-index:2}
+.book canvas.b3{position:absolute;left:-115%;top:-50%;width:330%;height:200%;pointer-events:none;z-index:2}
 .book.is3d .bk{visibility:hidden}
+.js .cur.grab{transform-origin:center;width:30px;height:30px;margin:-15px 0 0 -15px;background:color-mix(in srgb,var(--accdark) 25%,transparent)}
+
+/* ---------- footer, after the Airwalk programme footer: giant outlined name, the book in a vortex of pages, centred CTA ---------- */
+.foot.ff{position:relative;overflow:hidden;padding:0;background:radial-gradient(ellipse at 50% 55%,var(--dark),var(--darkest) 60%,#0d0204)}
+.ff .fbig{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;margin:0;font-family:W,A,sans-serif;font-weight:800;font-stretch:150%;font-size:clamp(70px,17vw,330px);line-height:.86;letter-spacing:-.02em;text-transform:uppercase;pointer-events:none;z-index:0;white-space:nowrap}
+.ff .fbig span{display:block;color:transparent;-webkit-text-stroke:1.5px color-mix(in srgb,var(--main) 55%,transparent)}
+.ff .fbig span:last-child{-webkit-text-stroke-color:rgba(255,255,255,.18)}
+#fcan{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.fin{position:relative;z-index:2;min-height:100svh;display:flex;flex-direction:column;justify-content:space-between;align-items:center;text-align:center;padding:clamp(110px,12vw,170px) max(20px,calc((100% - 1240px)/2)) 30px;pointer-events:none}
+.fin a,.fin .btn{pointer-events:auto}
+.fin .ftop,.fin .fcols,.fin .fbar{text-shadow:0 2px 18px rgba(0,0,0,.85)}
+.ff .ft{margin-top:18px;font:800 clamp(34px,4.6vw,84px)/1.02 W,A,sans-serif;font-stretch:150%;text-transform:uppercase;letter-spacing:-.02em;max-width:14ch}
+.ff .ft .f2{display:block;margin-top:.1em;font:400 1.15em/1 S;text-transform:none;font-stretch:100%;letter-spacing:0;color:var(--accdark)}
+.ff .ctas{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:30px}
+.ff .fcols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;margin:60px auto 0;width:100%;max-width:900px}
+.ff .fcols div{display:flex;flex-direction:column;align-items:center;gap:10px}
+.ff .fcols .k{margin-bottom:6px}
+.ff .fcols a{font-size:15px;opacity:.85;transition:opacity .25s,color .25s,transform .25s}
+.ff .fcols a:hover{opacity:1;color:var(--accdark);transform:translateY(-2px)}
+.ff .fbar{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 26px;margin-top:40px;padding-top:22px;width:100%;border-top:1px solid rgba(255,255,255,.1);font-size:12.5px;opacity:.85}
+.ff .totop{font-weight:700;transition:color .25s}.ff .totop:hover{color:var(--accdark)}
+@media (max-width:767px){.ff .fcols{grid-template-columns:1fr;gap:26px}#fcan{opacity:.5}.ff .ctas .btn{flex:1 1 100%}}
