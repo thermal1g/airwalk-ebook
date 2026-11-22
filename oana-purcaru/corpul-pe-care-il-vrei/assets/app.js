@@ -12,7 +12,7 @@ const PIN = () => !RM && !TOUCH && wideQ.matches;
 if (!PIN()) H.classList.add('nopin');
 
 const finishLoader = () => H.classList.add('done');
-setTimeout(finishLoader, 4500); // fail-safe: the loader never blocks the page
+setTimeout(finishLoader, 6500); // fail-safe: the loader never blocks the page
 
 /* ---------- things that work without GSAP ---------- */
 // sticky mobile CTA: after the hero, hidden while the buy section or the cookie banner is on screen
@@ -211,12 +211,26 @@ intro.from('.ht .ln', { yPercent: 55, opacity: 0, rotate: 2.5, duration: 1.1, st
   .from('.nav', { y: -30, opacity: 0, duration: .8 }, .4);
 
 const lt = gsap.timeline({ onComplete: () => { finishLoader(); } });
-const cnt = { v: 0 }, lc = $('.loader .lc b'), bar = $('.loader .lbar i');
-lt.to(cnt, { v: 100, duration: 1.15, ease: 'power2.inOut', onUpdate: () => { lc.textContent = Math.round(cnt.v); bar.style.width = cnt.v + '%'; } })
-  .to('.loader .lw, .loader .lbar', { opacity: 0, y: -20, duration: .35 })
-  .to('.loader .ls1', { yPercent: -105, duration: .8, ease: 'expo.inOut' }, '<.05')
-  .to('.loader .ls2', { yPercent: 105, duration: .8, ease: 'expo.inOut' }, '<')
-  .add(() => intro.play(), '<.25');
+const cnt = { v: 0 }, lc = $('.loader .lc'), line = $('.loader .lline i');
+// the loader assembles like the guide's cover: shards slide in, the name writes itself, a lime counter runs on a diagonal bar
+lt.from('.loader .lp1', { xPercent: -100, duration: .7, ease: 'expo.out' }, 0)
+  .from('.loader .lp2', { xPercent: 100, duration: .7, ease: 'expo.out' }, 0)
+  .from('.loader .l-tr', { x: 14, y: -14, opacity: 0, duration: .9, ease: 'expo.out' }, .15)
+  .from('.loader .l-bl', { x: -14, y: 14, opacity: 0, duration: .9, ease: 'expo.out' }, .2)
+  .from('.loader .l-r', { x: 10, opacity: 0, duration: .9, ease: 'expo.out' }, .25)
+  .from('.loader .ltri, .loader .ldots', { scale: 0, rotate: -90, opacity: 0, stagger: .06, duration: .7, ease: 'back.out(2)' }, .3)
+  .from('.loader .lcov img', { rotationY: 80, x: -40, opacity: 0, duration: 1, ease: 'expo.out' }, .3)
+  .from('.loader .lo', { clipPath: 'inset(0 100% 0 0)', duration: .9, ease: 'power2.inOut' }, .4)
+  .from('.loader .lpu i', { yPercent: 110, stagger: .04, duration: .7, ease: 'expo.out' }, .6)
+  .from('.loader .lsub, .loader .lfoot', { y: 14, opacity: 0, duration: .6 }, .75)
+  .to(cnt, { v: 100, duration: 1.3, ease: 'power2.inOut', onUpdate: () => { lc.textContent = Math.round(cnt.v); line.style.transform = `scaleX(${cnt.v / 100})`; } }, .5)
+  .to('.loader .ltri', { rotate: '+=120', duration: 1.3, ease: 'none' }, .5)
+  // exit: content lifts away, the two halves split along the diagonal
+  .to('.loader .lmid, .loader .lfoot', { y: -30, opacity: 0, filter: 'blur(6px)', duration: .45, ease: 'power2.in' }, '+=.1')
+  .to('.loader .lsh, .loader .ltri, .loader .ldots', { opacity: 0, scale: 1.1, duration: .45 }, '<')
+  .to('.loader .lp1', { yPercent: -105, duration: .85, ease: 'expo.inOut' }, '<.15')
+  .to('.loader .lp2', { yPercent: 105, duration: .85, ease: 'expo.inOut' }, '<')
+  .add(() => intro.play(), '<.3');
 lt.pause();
 const startLoader = () => lt.play();
 document.fonts && document.fonts.ready ? document.fonts.ready.then(startLoader) : startLoader();
