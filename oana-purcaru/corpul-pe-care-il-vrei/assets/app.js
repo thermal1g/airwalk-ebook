@@ -147,8 +147,8 @@ ScrollTrigger.config({ ignoreMobileResize: true });
 if (!PIN()) nativeCarousels();
 // GSAP folds the CSS `translate` of the hero cut-out into pixels; keep the centring in percent instead
 { const hm = gsap.matchMedia();
-  hm.add('(max-width:1023px)', () => { gsap.set('.hcut', { x: 0, xPercent: -50 }); });
-  hm.add('(min-width:1024px)', () => { gsap.set('.hcut', { x: 0, xPercent: -46 }); }); }
+  hm.add('(max-width:1023px)', () => { gsap.set('.hcut', { x: 0, xPercent: -54.9 }); });
+  hm.add('(min-width:1024px)', () => { gsap.set('.hcut', { x: 0, xPercent: -51.3 }); }); }
 
 // ---------- smooth scroll (desktop pointer only) ----------
 let lenis = null;
