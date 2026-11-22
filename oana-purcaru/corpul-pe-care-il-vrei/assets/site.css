@@ -826,3 +826,5 @@ html body #awc{transition:opacity .6s .3s,visibility .6s .3s}
 @media (max-width:1023px){.hsig{right:-3%;bottom:2%;width:clamp(150px,48%,250px)}}
 
 @media(max-width:600px){.ff .ftop .k{white-space:normal;display:block;max-width:calc(100vw - 48px);margin-inline:auto;line-height:1.5}}
+
+@media(max-width:700px){.ff .fbig{font-size:13vw;font-stretch:112%;letter-spacing:-.01em}}

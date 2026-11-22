@@ -346,8 +346,9 @@ gsap.from('.orb-ring', { y: 120, opacity: 0, scale: .9, duration: 1.2, ease: 'po
 gsap.from('.orb-mid, .orb-ctl, .fqcta', { y: 30, opacity: 0, duration: .9, stagger: .1, scrollTrigger: { trigger: '.orb', start: 'top 70%' } });
 
 // ---------- footer ----------
-gsap.fromTo('.fbig span:first-child', { xPercent: -6 }, { xPercent: 2, ease: 'none', scrollTrigger: { trigger: '.foot', start: 'top bottom', end: 'bottom bottom', scrub: true } });
-gsap.fromTo('.fbig span:last-child', { xPercent: 6 }, { xPercent: -2, ease: 'none', scrollTrigger: { trigger: '.foot', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+const FBX = matchMedia('(max-width:700px)').matches ? .4 : 1;   // phones: smaller drift so the big name never leaves the screen
+gsap.fromTo('.fbig span:first-child', { xPercent: -6 * FBX }, { xPercent: 2 * FBX, ease: 'none', scrollTrigger: { trigger: '.foot', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+gsap.fromTo('.fbig span:last-child', { xPercent: 6 * FBX }, { xPercent: -2 * FBX, ease: 'none', scrollTrigger: { trigger: '.foot', start: 'top bottom', end: 'bottom bottom', scrub: true } });
 gsap.from('.fcols > div, .ff .fbar', { y: 30, opacity: 0, duration: .8, stagger: .1, scrollTrigger: { trigger: '.fcols', start: 'top 95%' } });
 gsap.from('.ff .ftop > *', { y: 40, opacity: 0, duration: 1, stagger: .1, ease: 'power3.out', scrollTrigger: { trigger: '.ff', start: 'top 60%' } });
 
