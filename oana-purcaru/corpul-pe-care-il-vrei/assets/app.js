@@ -66,7 +66,7 @@ $$('.leg li').forEach(li => {
   li.addEventListener('click', on);
 });
 // statement: split into words (plain DOM, no plugin)
-$$('[data-fill]').forEach(el => { el.innerHTML = el.textContent.trim().split(/\s+/).map(w => `<span class="w">${w}</span>`).join(' '); });
+$$('[data-fill]').forEach(el => { el.innerHTML = [...el.childNodes].map(n => n.nodeType === 3 ? n.textContent.split(/(\s+)/).map(w => w.trim() ? `<span class="w">${w}</span>` : w).join('') : `<span class="w">${n.outerHTML}</span>`).join('').trim(); });
 // native horizontal carousels: progress + coverflow tilt (touch / narrow)
 const chTrack = $('.chtrack');
 const setChProg = p => { const pr = $('.chprog'); if (!pr) return; pr.style.setProperty('--p', p); const n = Math.min(10, Math.max(1, Math.round(p * 9) + 1)); $('.cur-n', pr).textContent = String(n).padStart(2, '0'); };

@@ -101,7 +101,7 @@ html,main>section,.foot{overflow-x:clip}
 .htri{position:absolute;color:#fff;opacity:.85;pointer-events:none}
 .htri.t1{left:48%;top:16%;transform:rotate(15deg)}.htri.t2{right:4%;top:52%;transform:rotate(-25deg) scale(.8)}.htri.t3{left:8%;top:72%;transform:rotate(-10deg) scale(.7)}
 .hgrid{position:relative;z-index:2;width:min(1240px,100% - 48px);margin-inline:auto;display:grid;grid-template-columns:1.08fr .92fr;gap:40px;align-items:center}
-.ht{font-family:W,A,sans-serif;font-size:clamp(34px,4.26vw,72px);font-weight:700;font-stretch:150%;line-height:1.04;margin:22px 0 0;letter-spacing:-.02em;text-transform:uppercase}
+.ht{font-family:A,sans-serif;font-size:clamp(40px,5.1vw,86px);font-weight:900;font-stretch:115%;line-height:1.02;margin:22px 0 0;letter-spacing:-.035em}
 .ht .ln{display:block;padding-top:.06em}
 .ht .acc{position:relative;z-index:1;display:block;font:400 2.75em/.82 L;text-transform:none;font-stretch:100%;letter-spacing:0;color:var(--accdark);margin:-.3em 0 0 -.04em;padding:.06em .1em .08em 0;text-shadow:0 10px 40px rgba(0,0,0,.35)}
 .hl{margin-top:24px;font-size:clamp(17px,1.5vw,20px);max-width:520px;opacity:.9}
@@ -141,7 +141,7 @@ html,main>section,.foot{overflow-x:clip}
   .htri.t1{left:auto;right:8%;top:30%}
 }
 @media (max-width:599px){
-  .ht{font-size:clamp(26px,7.6vw,38px);margin-top:18px}
+  .ht{font-size:clamp(32px,9.6vw,46px);margin-top:18px}
   .hl{font-size:16.5px}
   .hcta{margin-top:26px}.hcta .btn{flex:1 1 100%}
   .hstats{gap:18px;margin-top:30px;justify-content:space-between}
@@ -751,7 +751,7 @@ html:not(.nopin) .chc:not(.end){height:100%}
 @media (max-height:820px){html:not(.nopin) .chc:not(.end) .cht>p:not(.rec){-webkit-line-clamp:1}}
 
 /* highlighted words in headings: the handwritten Damion */
-h2 em,h3 em{font-family:L,cursive;font-weight:400;font-stretch:100%;letter-spacing:0;font-size:1.2em;line-height:.9;padding-right:.06em}
+h2 em{font-family:L,cursive;font-weight:400;font-stretch:100%;letter-spacing:0;font-size:1.2em;line-height:.9;padding-right:.06em}
 .ff .ft em{font-family:L,cursive}
 /* more neon lime on dark backgrounds: numbers and counters */
 html[data-pal="1"] .hstats b,html[data-pal="1"] .pain .pq,html[data-pal="1"] .chc:not(.end) .chn,html[data-pal="1"] .about .nums b,
@@ -761,3 +761,12 @@ html[data-pal="1"] .light .onums b{color:var(--acclight)}
 html[data-pal="1"] .gval{stroke:var(--lime)}
 html[data-pal="1"] .tline{stroke:var(--lime)}html[data-pal="1"] .tfill{fill:color-mix(in srgb,var(--lime) 16%,transparent)}
 html[data-pal="1"] .seam .t3,html[data-pal="1"] .dz svg.dk.tf{color:var(--lime)}
+
+/* decor colours: white and neon lime pieces on dark backgrounds */
+svg.dk.cw{color:#fff;opacity:.8}i.dk.rg.cw{border-color:#fff}
+html[data-pal="1"] svg.dk.cl{color:var(--lime)}html[data-pal="1"] i.dk.dg.cl{background-image:radial-gradient(circle,var(--lime) 2px,transparent 2.4px)}
+.light svg.dk.cw,.light svg.dk.cl{color:var(--main)}
+html:not([data-pal="1"]) svg.dk.cl{color:var(--hi)}
+
+/* statement keywords: same principle as section titles (Damion, lime on dark) */
+.stmt .big em{font-style:normal;font-family:L,cursive;font-weight:400;font-stretch:100%;font-size:1.22em;line-height:.9;letter-spacing:0;color:var(--lime,var(--accdark))}

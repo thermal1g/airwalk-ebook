@@ -9,7 +9,7 @@ const PIN = () => !RM && !TOUCH && innerWidth >= 1024;
 if (!PIN()) H.classList.add('nopin');
 
 // no-GSAP-safe parts
-$$('[data-fill]').forEach(el => { el.innerHTML = el.textContent.trim().split(/\s+/).map(w => `<span class="w">${w}</span>`).join(' '); });
+$$('[data-fill]').forEach(el => { el.innerHTML = [...el.childNodes].map(n => n.nodeType === 3 ? n.textContent.split(/(\s+)/).map(w => w.trim() ? `<span class="w">${w}</span>` : w).join('') : `<span class="w">${n.outerHTML}</span>`).join('').trim(); });
 $$('.osk').forEach(c => c.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px'); }));
 // results row: drag with the mouse, native swipe on touch
 { const row = $('.orzrow'); if (row) { let d = null;
