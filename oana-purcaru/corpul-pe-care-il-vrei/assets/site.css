@@ -883,6 +883,15 @@ odo-x{display:inline-block;line-height:1}
 @media(prefers-reduced-motion:reduce){.btn .bcut,.shw .shx,.dg::after{display:none}}
 /* section transition: shard sweep into #oana */
 .about{position:relative;overflow:hidden}
-.secsw{position:absolute;top:0;bottom:0;left:0;width:46%;z-index:4;pointer-events:none;background:linear-gradient(100deg,var(--main) 0 72%,var(--accdark) 72% 86%,var(--hi) 86%);transform:skewX(-16deg) translateX(-160%)}
+.secsw{position:absolute;top:-4%;bottom:-4%;left:0;width:62%;z-index:4;pointer-events:none;visibility:hidden}
+.secsw svg{display:block;width:100%;height:100%}
 /* logo: OANA in Lime, the same as the loader (Alexandru, 22 Nov 2026) */
 .brand b{color:var(--lime,var(--accdark))}
+
+/* quote: script words in Lime, the same highlight rule as the headlines (Alexandru, 22 Nov 2026) */
+.qt em{color:var(--lime,#fff);text-shadow:0 2px 14px rgba(26,4,9,.28)}
+/* brand edge shards in the section margins (Alexandru, 22 Nov 2026: shards across the site, not overdone) */
+.dk.shd{position:absolute;width:clamp(30px,3.2vw,52px);height:clamp(70px,7.2vw,118px);overflow:visible;pointer-events:none}
+.dk.shd .m{fill:var(--main);fill-opacity:.9}.dk.shd .mi{fill:var(--accdark);fill-opacity:.55}.dk.shd .h{fill:var(--hi);fill-opacity:.5}.dk.shd .w{fill:var(--dark);fill-opacity:.85}
+.light .dk.shd .w{fill:var(--main);fill-opacity:.35}
+@media(max-width:600px){.dk.shd{width:22px;height:54px}}

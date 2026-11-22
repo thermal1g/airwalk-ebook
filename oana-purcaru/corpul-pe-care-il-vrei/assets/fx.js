@@ -109,11 +109,16 @@ if (!RM) { const dgs = $$('.dg');
 // ---- section transition: shard sweep into "Oana" (approved 22 Nov 2026). The brand shard crosses the screen and
 // the section is revealed behind it, tied to the scroll.
 { const sec = $('#oana'), inner = sec && $('.abg', sec);
-  if (sec && inner && !RM && window.gsap && window.ScrollTrigger) {
-    const sw = document.createElement('i'); sw.className = 'secsw'; sw.setAttribute('aria-hidden', 'true'); sec.appendChild(sw);
-    gsap.set(sw, { xPercent: -160, skewX: -16 });
-    gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top 82%', end: 'top 12%', scrub: .6 } })
-      .to(sw, { xPercent: 330, ease: 'none', duration: 1 }, 0)
-      .fromTo(inner, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'none', duration: .82 }, .14);
+  if (sec && inner && !RM && window.gsap) {
+    // a real brand shard (Crimson body, Pink band, Blush edge, Wine wedge), not a flat block; plays once, never parks on screen
+    const sw = document.createElement('i'); sw.className = 'secsw'; sw.setAttribute('aria-hidden', 'true');
+    sw.innerHTML = '<svg viewBox="0 0 100 100" preserveAspectRatio="none"><polygon points="34,0 100,0 66,100 0,100" style="fill:var(--main);fill-opacity:.94"/><polygon points="26,0 34,0 0,100 -8,100" style="fill:var(--accdark);fill-opacity:.6"/><polygon points="22,0 26,0 -8,100 -12,100" style="fill:var(--hi);fill-opacity:.5"/><polygon points="78,0 100,0 92,34" style="fill:var(--dark);fill-opacity:.85"/></svg>';
+    sec.appendChild(sw);
+    gsap.set(sw, { xPercent: -130, autoAlpha: 1 }); gsap.set(inner, { clipPath: 'inset(0 100% 0 0)' });
+    const tl = gsap.timeline({ paused: true })
+      .to(sw, { xPercent: 190, duration: 1.25, ease: 'power3.inOut' }, 0)
+      .to(inner, { clipPath: 'inset(0 0% 0 0)', duration: 1.05, ease: 'power3.inOut' }, .18)
+      .set(sw, { autoAlpha: 0 });
+    new IntersectionObserver(([e], o) => { if (e.isIntersecting) { tl.play(); o.disconnect(); } }, { threshold: .25 }).observe(sec);
   } }
 })();
