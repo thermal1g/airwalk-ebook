@@ -76,8 +76,9 @@ html:not(.nopin) .osc{height:100%}html:not(.nopin) .osc .osi{flex:1 1 auto;min-h
 
 /* results row */
 .orz{padding:clamp(90px,10vw,140px) 0 clamp(60px,7vw,90px)}
-.orzrow{margin-top:40px;display:flex;gap:16px;overflow-x:auto;padding:10px max(24px,calc((100% - 1240px)/2)) 20px;scrollbar-width:none;cursor:grab;scroll-snap-type:x proximity}
-.orzrow::-webkit-scrollbar{display:none}.orzrow.drag{cursor:grabbing;scroll-snap-type:none}
+.orzrow{margin-top:40px;display:flex;gap:16px;overflow-x:auto;padding:10px max(24px,calc((100% - 1240px)/2)) 20px;scrollbar-width:none;cursor:grab;user-select:none;-webkit-user-select:none;overscroll-behavior-x:contain}
+@media (pointer:coarse){.orzrow{scroll-snap-type:x proximity}}
+.orzrow::-webkit-scrollbar{display:none}.orzrow.drag{cursor:grabbing}.orzrow.drag figure{transform:none}
 .orzrow figure{flex:none;margin:0;height:clamp(260px,30vw,380px);border-radius:10px;overflow:hidden;background:#fff;border:1.5px solid var(--line);scroll-snap-align:start;transition:transform .4s cubic-bezier(.2,.7,.2,1)}
 .orzrow figure:hover{transform:translateY(-6px) rotate(-1deg)}
 .orzrow img{height:100%;width:auto;pointer-events:none}
@@ -98,3 +99,8 @@ html:not(.nopin) .osc{height:100%}html:not(.nopin) .osc .osi{flex:1 1 auto;min-h
 .octa{margin-top:44px;display:flex;flex-wrap:wrap;gap:18px 30px;align-items:center;justify-content:space-between;padding:28px;border-radius:10px;background:var(--dark)}
 .octa p{font:700 clamp(19px,2vw,26px)/1.25 A;max-width:560px}
 @media (max-width:599px){.olinks a{grid-template-columns:1fr auto;gap:6px 14px}.olinks span{grid-column:1/-1}}
+
+/* footer name follows the logo rule: OANA bold in Lime, PURCARU light in white, both uppercase (Alexandru, 22 Nov 2026) */
+.foot .fbig{text-transform:uppercase;font-stretch:118%;letter-spacing:-.01em}
+.foot .fbig span:first-child{font-weight:800;color:var(--lime,var(--accdark))}
+.foot .fbig span:last-child{font-weight:300;color:#fff}

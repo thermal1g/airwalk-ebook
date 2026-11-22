@@ -11,11 +11,21 @@ if (!PIN()) H.classList.add('nopin');
 // no-GSAP-safe parts
 $$('[data-fill]').forEach(el => { el.innerHTML = [...el.childNodes].map(n => n.nodeType === 3 ? n.textContent.split(/(\s+)/).map(w => w.trim() ? `<span class="w">${w}</span>` : w).join('') : `<span class="w">${n.outerHTML}</span>`).join('').trim(); });
 $$('.osk').forEach(c => c.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px'); }));
-// results row: drag with the mouse, native swipe on touch
-{ const row = $('.orzrow'); if (row) { let d = null;
-  row.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; d = { x: e.clientX, l: row.scrollLeft }; row.classList.add('drag'); });
-  addEventListener('pointermove', e => { if (d) row.scrollLeft = d.l - (e.clientX - d.x); });
-  addEventListener('pointerup', () => { d = null; row.classList.remove('drag'); }); } }
+// results row: drag with the mouse (with momentum), native swipe on touch. It is never moved by the page scroll:
+// the old scroll-linked scrollLeft fought the user (jumps while scrolling, snapping back after a drag; fixed 22 Nov 2026)
+{ const row = $('.orzrow'); if (row) { let d = null, v = 0, raf = 0, lastX = 0, lastT = 0;
+  const glide = () => { v *= .94; row.scrollLeft -= v; raf = Math.abs(v) > .3 ? requestAnimationFrame(glide) : 0; };
+  row.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse' || e.button !== 0) return; cancelAnimationFrame(raf); v = 0;
+    d = { x: e.clientX, l: row.scrollLeft, moved: false }; lastX = e.clientX; lastT = performance.now(); });
+  row.addEventListener('pointermove', e => { if (!d) return; const dx = e.clientX - d.x;
+    if (!d.moved && Math.abs(dx) > 4) { d.moved = true; row.classList.add('drag'); row.setPointerCapture(e.pointerId); }
+    if (!d.moved) return; e.preventDefault(); row.scrollLeft = d.l - dx;
+    const now = performance.now(), dt = Math.max(1, now - lastT); v = (e.clientX - lastX) * (16 / dt) * .9; lastX = e.clientX; lastT = now; });
+  const end = e => { if (!d) return; const was = d.moved; d = null; row.classList.remove('drag');
+    if (was) { if (performance.now() - lastT > 80) v = 0; raf = requestAnimationFrame(glide); } };
+  row.addEventListener('pointerup', end); row.addEventListener('pointercancel', end); row.addEventListener('lostpointercapture', end);
+  row.addEventListener('dragstart', e => e.preventDefault());
+  row.addEventListener('wheel', () => { cancelAnimationFrame(raf); v = 0; }, { passive: true }); } }
 // story track: native progress on touch / narrow
 const track = $('.osttrack'), steps = $$('.osc'), prog = p => { const pr = $('.ost .chprog'); if (!pr) return; pr.style.setProperty('--p', p); $('.cur-n', pr).textContent = String(Math.min(steps.length, Math.round(p * (steps.length - 1)) + 1)).padStart(2, '0'); };
 if (track && !PIN()) track.addEventListener('scroll', () => prog(track.scrollLeft / Math.max(1, track.scrollWidth - track.clientWidth)), { passive: true });
@@ -95,7 +105,7 @@ $$('.obfm figure').forEach((f, i) => { const sp = [.5, 1.1, .8, 1.4][i] || 1;
   gsap.from(f, { clipPath: 'inset(100% 0 0 0)', duration: 1.3, delay: i * .1, ease: 'expo.inOut', scrollTrigger: { trigger: '.obfm', start: 'top 80%' } }); });
 gsap.from('.obft > *', { y: 30, opacity: 0, stagger: .08, duration: .8, scrollTrigger: { trigger: '.obft', start: 'top 80%' } });
 // results row drifts sideways with the page
-{ const row = $('.orzrow'); if (row) ScrollTrigger.create({ trigger: '.orz', start: 'top bottom', end: 'bottom top', onUpdate: s => { if (!row.classList.contains('drag')) row.scrollLeft = s.progress * (row.scrollWidth - row.clientWidth); } }); }
+
 gsap.from('.orzrow figure', { y: 60, opacity: 0, stagger: .05, duration: .8, ease: 'power3.out', scrollTrigger: { trigger: '.orzrow', start: 'top 85%' } });
 $$('.lens').forEach(l => gsap.from(l, { y: 90, opacity: 0, scale: .94, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: l, start: 'top 85%' } }));
 // contact rows slide in, footer name drifts
