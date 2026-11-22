@@ -348,9 +348,9 @@ gsap.fromTo('.buy', { '--t': 0 }, { '--t': 1, ease: 'none', scrollTrigger: { tri
 // decor: every guide shape inside a section drifts at its own speed; triangles also turn
 $$('.dz .dk').forEach(el => { const sp = +el.dataset.sp || .5, sec = el.closest('section,footer');
   gsap.fromTo(el, { y: 140 * sp, rotate: el.tagName === 'svg' ? -40 * sp : 0 }, { y: -140 * sp, rotate: el.tagName === 'svg' ? 60 * sp : 0, ease: 'none', scrollTrigger: { trigger: sec, start: 'top bottom', end: 'bottom top', scrub: true } }); });
-// fixed gutter layer: pinned to the screen, pieces drift slowly with the whole page
+// gutter layer: shapes down both edges of the page, each scrolling at its own speed (slower or faster than the page)
 $$('.fx .dk').forEach(el => { const sp = +el.dataset.sp || 1;
-  gsap.fromTo(el, { y: 0 }, { y: -260 * sp, rotate: el.tagName === 'svg' ? 220 * sp : 0, ease: 'none', scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: .6 } }); });
+  gsap.fromTo(el, { y: 220 * sp, rotate: el.tagName === 'svg' ? -50 * sp : 0 }, { y: -220 * sp, rotate: el.tagName === 'svg' ? 70 * sp : 0, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: .5 } }); });
 // quote: keywords get a dark wipe, one after another
 { const ems = $$('.qt em'); ScrollTrigger.create({ trigger: '.qt', start: 'top 62%', once: true, onEnter: () => ems.forEach((e, i) => setTimeout(() => e.classList.add('on'), 500 + i * 380)) }); }
 

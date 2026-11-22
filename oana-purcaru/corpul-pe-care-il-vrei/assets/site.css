@@ -565,10 +565,11 @@ i.dk.ln{width:clamp(90px,9vw,150px);height:1.5px;background:linear-gradient(90de
 i.dk.sl{width:clamp(200px,26vw,420px);height:clamp(9px,1vw,14px);background:linear-gradient(90deg,transparent,var(--main) 35%,var(--hi));rotate:-8deg;opacity:.9}
 i.dk.rg{width:clamp(38px,3.4vw,54px);aspect-ratio:1;border:1.5px solid var(--main);border-radius:50%}
 i.dk.rg::after{content:"";position:absolute;left:-4px;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;background:var(--main)}
-.fx{position:fixed;inset:0;z-index:40;pointer-events:none;overflow:hidden}
+body{position:relative}
+.fx{position:absolute;left:0;right:0;top:0;bottom:0;z-index:40;pointer-events:none;overflow:hidden}
 .fx .dk{opacity:.75}
 .fx i.dk.dg{--c:3!important;--r:5!important}
-@media (max-width:1100px){.fx .dk:nth-child(n+4){display:none}.fx .dk{opacity:.5;transform-origin:center}}
+@media (max-width:1100px){.fx .dk{opacity:.45}.fx .dk:nth-child(3n){display:none}}
 @media (max-width:599px){.fx{display:none}.dz .dk.dg{scale:.7}.dz .ln{display:none}}
 @media print{.fx,.dz{display:none}}
 
