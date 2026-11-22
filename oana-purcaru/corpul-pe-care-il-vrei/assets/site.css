@@ -648,3 +648,51 @@ a.tl:hover::after,a.tl:focus-visible::after{transform:translate(2px,-3px);opacit
 @media (max-width:1100px){.cgrid{grid-template-columns:repeat(2,1fr)}.cres{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:599px){.cform{grid-template-columns:1fr}.cf-sex{flex-direction:row}.cf-sex legend{width:100%}.cf-sex label{flex:1}.cf-sex span{text-align:center}.cgrid{gap:10px}.cin input{font-size:26px}.cres{grid-template-columns:1fr}.cr{min-height:0}}
 .abmore{margin-top:26px}
+
+/* ---------- programs: holographic scanner ---------- */
+.scg{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;margin-top:36px;align-items:center}
+.scv{position:relative;aspect-ratio:1/1.05;border-radius:12px;overflow:hidden;background:radial-gradient(ellipse at 50% 40%,color-mix(in srgb,var(--main) 22%,transparent),transparent 62%),var(--darkest);border:1px solid color-mix(in srgb,var(--main) 35%,transparent);perspective:1600px}
+.scgrid{position:absolute;inset:0;background:linear-gradient(color-mix(in srgb,var(--main) 14%,transparent) 1px,transparent 1px) 0 0/100% 28px,linear-gradient(90deg,color-mix(in srgb,var(--main) 14%,transparent) 1px,transparent 1px) 0 0/28px 100%;mask-image:radial-gradient(ellipse at center,#000 40%,transparent 80%);-webkit-mask-image:radial-gradient(ellipse at center,#000 40%,transparent 80%)}
+.scflip{position:absolute;left:50%;top:6%;height:88%;aspect-ratio:104/212;transform:translateX(-50%) rotateY(0);transform-style:preserve-3d;transition:transform 1.1s cubic-bezier(.7,0,.2,1)}
+.scflip.back{transform:translateX(-50%) rotateY(180deg)}
+.scface{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.scface.bk{transform:rotateY(180deg)}
+.scface svg{width:100%;height:100%;overflow:visible}
+.scface polygon{fill:color-mix(in srgb,var(--main) 10%,transparent);stroke:color-mix(in srgb,var(--main) 70%,#fff);stroke-width:.35;stroke-opacity:.6;transition:fill .5s,stroke-opacity .5s,filter .5s}
+.scface polygon.n{fill:color-mix(in srgb,#fff 5%,transparent)}
+.scface polygon.on{fill:var(--main);stroke:#fff;stroke-opacity:.9;filter:drop-shadow(0 0 2.5px var(--main)) drop-shadow(0 0 7px var(--main));animation:pulse 2.4s ease-in-out infinite}
+@keyframes pulse{50%{fill:color-mix(in srgb,var(--main) 70%,#fff)}}
+.scan{position:absolute;left:0;right:0;top:0;height:90px;margin-top:-90px;background:linear-gradient(to bottom,transparent,color-mix(in srgb,var(--main) 30%,transparent) 80%,color-mix(in srgb,var(--main) 90%,#fff) 98%,transparent);pointer-events:none}
+.sccall{position:absolute;inset:0;pointer-events:none}
+.co{position:absolute;display:flex;align-items:center;gap:8px;transform:translateY(-50%);font:700 12px/1.2 A;font-stretch:112%;white-space:nowrap}
+.co i{width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px color-mix(in srgb,var(--main) 60%,transparent),0 0 14px var(--main);flex:none}
+.co s{height:1px;width:var(--w,60px);background:linear-gradient(90deg,#fff,color-mix(in srgb,#fff 30%,transparent));text-decoration:none}
+.co span{padding:5px 9px;border:1px solid color-mix(in srgb,var(--main) 60%,transparent);background:color-mix(in srgb,var(--darkest) 80%,transparent);border-radius:4px}
+.co.l{flex-direction:row-reverse}.co.l s{background:linear-gradient(270deg,#fff,color-mix(in srgb,#fff 30%,transparent))}
+.scturn{position:absolute;right:14px;bottom:14px;padding:9px 13px;border-radius:99px;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.4);color:#fff;font:700 12px/1 A;cursor:pointer}
+.scturn:hover{background:var(--cta);color:var(--oncta);border-color:var(--cta)}
+.schud{position:absolute;left:14px;top:14px;display:flex;gap:10px;align-items:baseline;font:700 11px/1 A;letter-spacing:.18em;color:color-mix(in srgb,var(--main) 50%,#fff)}
+.schud b{font:400 22px/1 N;letter-spacing:0;color:#fff}
+.progs .freq{font-weight:800;color:var(--acclight);font-size:15px}
+.scdays{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.scdays button{display:flex;justify-content:space-between;gap:14px;padding:14px 16px;border-radius:6px;border:1.5px solid var(--line);background:#fff;color:var(--fg);font:700 15px/1.2 A;text-align:left;cursor:pointer;transition:background .25s,border-color .25s}
+.scdays button span{font:600 12.5px G;opacity:.7}
+.scdays button:hover{border-color:var(--acclight)}
+.scdays button[aria-pressed="true"]{background:var(--cta);border-color:var(--cta);color:var(--oncta)}
+.scdays button:focus-visible{outline:3px solid var(--acclight);outline-offset:2px}
+.scinfo{margin-top:18px;padding:18px;border-radius:8px;background:#fff;border:1.5px solid var(--line);min-height:150px}
+.scinfo li{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line);font-size:15px}
+.scinfo li b{color:var(--acclight);font:400 19px N;white-space:nowrap}
+.scinfo>b{font:800 17px A}.scinfo ul{list-style:none;margin:8px 0 0;padding:0}.scinfo .more{margin-top:10px;font-size:13.5px;font-style:italic;color:var(--fg2)}
+@media (max-width:899px){.scg{grid-template-columns:1fr}.scv{aspect-ratio:1/1.1}.co{font-size:10.5px}.co span{padding:4px 7px}}
+@media (prefers-reduced-motion:reduce){.scan{display:none}.scface polygon.on{animation:none}.scflip{transition:none}}
+
+.progs .scv{box-shadow:0 40px 80px -40px rgba(0,0,0,.55);color:#fff}
+.progs .sct{margin-top:30px}
+.ptabs button[aria-pressed=true]{background:var(--cta);border-color:var(--cta);color:var(--oncta)}
+.scside .mmn{margin-top:12px}
+.sccall .coln{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.sccall .coln polyline{fill:none;stroke:#fff;stroke-opacity:.75;stroke-width:1}
+.sccall .coln circle{fill:#fff;filter:drop-shadow(0 0 5px var(--main))}
+.sccall .col{position:absolute;transform:translateY(-50%);padding:5px 9px;border:1px solid color-mix(in srgb,var(--main) 65%,transparent);background:color-mix(in srgb,var(--darkest) 85%,transparent);border-radius:4px;font:700 12px/1.15 A;font-stretch:112%;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:599px){.sccall .col{font-size:10.5px;padding:4px 6px}}

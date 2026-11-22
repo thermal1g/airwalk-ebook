@@ -286,9 +286,8 @@ $$('.lens').forEach(l => gsap.from(l, { y: 90, opacity: 0, scale: .94, duration:
 
 // ---------- programs ----------
 gsap.from('.ptabs button', { y: 24, opacity: 0, stagger: .07, duration: .7, scrollTrigger: { trigger: '.ptabs', start: 'top 88%' } });
-gsap.from('.mmw', { y: 60, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.pcols', start: 'top 85%' } });
-gsap.fromTo('.mm polygon[data-g]', { opacity: 0 }, { opacity: 1, duration: .5, stagger: { each: .006, from: 'random' }, clearProps: 'opacity', scrollTrigger: { trigger: '.mm', start: 'top 80%' } });
-gsap.from('#pp1 .day', { x: -30, opacity: 0, stagger: .1, duration: .8, ease: 'power3.out', scrollTrigger: { trigger: '.ppanels', start: 'top 85%' } });
+gsap.from('.scv', { y: 60, opacity: 0, scale: .96, duration: 1.1, ease: 'power3.out', scrollTrigger: { trigger: '.scg', start: 'top 85%' } });
+gsap.from('.scside > *', { x: 40, opacity: 0, stagger: .08, duration: .8, ease: 'power3.out', scrollTrigger: { trigger: '.scg', start: 'top 80%' } });
 
 // ---------- results ----------
 const countUp = (el) => {
