@@ -70,8 +70,36 @@ $$('[data-fill]').forEach(el => { el.innerHTML = el.textContent.trim().split(/\s
 // native horizontal carousels: progress + coverflow tilt (touch / narrow)
 const chTrack = $('.chtrack');
 const setChProg = p => { const pr = $('.chprog'); if (!pr) return; pr.style.setProperty('--p', p); const n = Math.min(10, Math.max(1, Math.round(p * 9) + 1)); $('.cur-n', pr).textContent = String(n).padStart(2, '0'); };
+const chHint = $('.chhint'), chP = $('.chp'), chX = $('.chx');
+const chStep = () => { const c = $('.chc', chTrack); return c ? c.getBoundingClientRect().width + parseFloat(getComputedStyle(chTrack).columnGap || 22) : 400; };
+const chState = p => { if (chP) chP.disabled = p < .01; if (chX) chX.disabled = p > .99; if (p > .03 && chHint) chHint.classList.add('gone'); };
+let chPinST = null; // set when the desktop pin is active
+const chGo = dir => {
+  if (chPinST) { // pinned: horizontal position = vertical scroll inside the pin
+    const st = chPinST, cur = scrollY - st.start, step = chStep();
+    const to = Math.min(st.end, Math.max(st.start, st.start + Math.round((cur + dir * step) / step) * step));
+    window.__lenis ? window.__lenis.scrollTo(to, { duration: 1 }) : scrollTo({ top: to, behavior: 'smooth' });
+  } else chTrack.scrollBy({ left: dir * chStep(), behavior: RM ? 'auto' : 'smooth' });
+};
+if (chP) chP.addEventListener('click', () => chGo(-1));
+if (chX) chX.addEventListener('click', () => chGo(1));
 const nativeCarousels = () => {
-  if (chTrack) chTrack.addEventListener('scroll', () => setChProg(chTrack.scrollLeft / Math.max(1, chTrack.scrollWidth - chTrack.clientWidth)), { passive: true });
+  if (!chTrack || chTrack.dataset.nat) return; chTrack.dataset.nat = 1;
+  const upd = () => { const p = chTrack.scrollLeft / Math.max(1, chTrack.scrollWidth - chTrack.clientWidth); setChProg(p); if (!chPinST) chState(p); };
+  chTrack.addEventListener('scroll', upd, { passive: true }); upd();
+  // mouse users on narrow screens: drag the row like a phone
+  let down = null;
+  chTrack.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse' || chPinST || e.target.closest('a,button')) return; down = { x: e.clientX, l: chTrack.scrollLeft, moved: false }; });
+  addEventListener('pointermove', e => { if (!down) return; const dx = e.clientX - down.x; if (Math.abs(dx) > 4 && !down.moved) { down.moved = true; chTrack.classList.add('drag'); } if (down.moved) chTrack.scrollLeft = down.l - dx; });
+  addEventListener('pointerup', () => { if (!down) return; const was = down.moved; down = null; chTrack.classList.remove('drag'); if (was) { const st = chStep(); chTrack.scrollTo({ left: Math.round(chTrack.scrollLeft / st) * st, behavior: 'smooth' }); } });
+  // first time the row is seen: a short peek to the right, so it is obvious it moves sideways
+  if (!RM && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(([e]) => { if (!e.isIntersecting || chPinST) return; io.disconnect();
+      setTimeout(() => { if (chTrack.scrollLeft > 4) return; chTrack.style.scrollSnapType = 'none';
+        chTrack.scrollTo({ left: Math.min(140, chStep() * .38), behavior: 'smooth' });
+        setTimeout(() => { chTrack.scrollTo({ left: 0, behavior: 'smooth' }); setTimeout(() => chTrack.style.scrollSnapType = '', 600); }, 700); }, 450); }, { threshold: .55 });
+    io.observe(chTrack);
+  }
 };
 // FAQ: orbital carousel (cards on an arc, active one on top, its answer in the middle)
 { const orb = $('.orb');
@@ -124,7 +152,7 @@ if (!RM && !TOUCH && window.Lenis) {
   lenis = new Lenis({ lerp: .09, wheelMultiplier: 1 });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(500, 33);
-  H.classList.add('lenis');
+  H.classList.add('lenis'); window.__lenis = lenis;
 }
 $$('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
   const id = a.getAttribute('href'); if (id.length < 2) return;
@@ -230,13 +258,14 @@ mmq.add({ pin: '(min-width:1024px) and (hover:hover) and (pointer:fine)' }, ctx 
   H.classList.remove('nopin');
   const dist = () => Math.max(0, chTrack.scrollWidth - innerWidth);
   const tw = gsap.to(chTrack, { x: () => -dist(), ease: 'none',
-    scrollTrigger: { trigger: '.chpin', pin: true, start: 'top top', end: () => '+=' + dist(), scrub: 1, invalidateOnRefresh: true, onUpdate: s => setChProg(s.progress) } });
+    scrollTrigger: { trigger: '.chpin', pin: true, start: 'top top', end: () => '+=' + dist(), scrub: 1, invalidateOnRefresh: true, onUpdate: s => { setChProg(s.progress); chState(s.progress); } } });
+  chPinST = tw.scrollTrigger; chTrack.dataset.cur = 'Derulează';
   $$('.chc', chTrack).forEach(c => {
     const img = $('.chi img', c);
     if (img) gsap.fromTo(img, { xPercent: -6 }, { xPercent: 6, ease: 'none', scrollTrigger: { trigger: c, containerAnimation: tw, start: 'left right', end: 'right left', scrub: true } });
     gsap.from($$('.cht > *', c), { y: 30, opacity: 0, stagger: .06, duration: .7, ease: 'power3.out', scrollTrigger: { trigger: c, containerAnimation: tw, start: 'left 85%' } });
   });
-  return () => { H.classList.add('nopin'); gsap.set(chTrack, { clearProps: 'transform' }); };
+  return () => { chPinST = null; chTrack.dataset.cur = 'Trage'; H.classList.add('nopin'); gsap.set(chTrack, { clearProps: 'transform' }); nativeCarousels(); };
 });
 mmq.add('(max-width:1023px), (hover:none), (pointer:coarse)', () => {
   gsap.from('.chc', { y: 50, opacity: 0, stagger: .08, duration: .8, ease: 'power3.out', scrollTrigger: { trigger: '.chtrack', start: 'top 85%' } });
@@ -290,6 +319,35 @@ gsap.from('.orb-mid, .orb-ctl, .fqcta', { y: 30, opacity: 0, duration: .9, stagg
 gsap.fromTo('.fbig span:first-child', { xPercent: -6 }, { xPercent: 2, ease: 'none', scrollTrigger: { trigger: '.foot', start: 'top bottom', end: 'bottom bottom', scrub: true } });
 gsap.fromTo('.fbig span:last-child', { xPercent: 6 }, { xPercent: -2, ease: 'none', scrollTrigger: { trigger: '.foot', start: 'top bottom', end: 'bottom bottom', scrub: true } });
 gsap.from('.fcols > div', { y: 30, opacity: 0, duration: .8, stagger: .1, scrollTrigger: { trigger: '.fcols', start: 'top 95%' } });
+
+// ---------- section transitions (scrubbed, ebook-inspired) ----------
+H.classList.add('tx');
+// 1. chapters -> programs: the light page enters on the ebook's diagonal cut, with a brand-colour slash on its edge
+gsap.fromTo('.progs.tx-slash', { '--t': 1 }, { '--t': 0, ease: 'none', scrollTrigger: { trigger: '.progs', start: 'top bottom', end: 'top 25%', scrub: true } });
+// 2. programs -> pages: the light page peels off from the bottom-left corner like a turned page
+{ const pg = $('.pturn .pg'), fl = $('.pturn .fl');
+  if (pg && fl) {
+    const P = a => 'polygon(' + a.map(([x, y]) => x.toFixed(2) + '% ' + y.toFixed(2) + '%').join(',') + ')';
+    const turn = p => { const c = -100 + p * 200; // fold line x - y = c (in % of the section)
+      const rest = c <= 0 ? [[0, 0], [100, 0], [100, 100], [100 + c, 100], [0, -c]] : [[c, 0], [100, 0], [100, 100 - c]];
+      const peel = c <= 0 ? [[0, -c], [100 + c, 100], [0, 100]] : [[0, 0], [c, 0], [100, 100 - c], [100, 100], [0, 100]];
+      pg.style.clipPath = P(p >= 1 ? [[100, 0], [100, 0], [100, 0]] : rest);
+      fl.style.clipPath = P(p >= 1 ? [[100, 0], [100, 0], [100, 0]] : peel.map(([x, y]) => [y + c, x - c])); };
+    turn(0);
+    ScrollTrigger.create({ trigger: '.pages', start: 'top 92%', end: 'top 18%', scrub: .4, onUpdate: s => turn(s.progress), onRefresh: s => turn(s.progress) });
+  } }
+// 3. results -> quote: the light page splits down the middle like a before/after and slides open
+gsap.fromTo('.quote', { '--t': 0 }, { '--t': 1, ease: 'none', scrollTrigger: { trigger: '.quote', start: 'top 95%', end: 'top 30%', scrub: true } });
+// 4. about -> buy: the offer opens as an iris from the top edge
+gsap.fromTo('.buy', { '--t': 0 }, { '--t': 1, ease: 'none', scrollTrigger: { trigger: '.buy', start: 'top bottom', end: 'top 20%', scrub: true } });
+
+// seams: the guide's triangles drift and turn, slashes draw in, dots float, all tied to scroll
+$$('.seam').forEach((sm, i) => {
+  const st = { trigger: sm, start: 'top bottom', end: 'top top', scrub: true }, dir = i % 2 ? 1 : -1;
+  gsap.fromTo($$('.st', sm), { y: 60, rotate: -30 * dir }, { y: -60, rotate: 50 * dir, ease: 'none', stagger: .05, scrollTrigger: st });
+  gsap.fromTo($$('.sd', sm), { y: 40 }, { y: -40, ease: 'none', scrollTrigger: st });
+  const sg = $('.sg', sm); if (sg) gsap.from(sg, { scaleX: 0, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: sm, start: 'top 85%' } });
+});
 
 // recalc once fonts and images are in
 addEventListener('load', () => ScrollTrigger.refresh());

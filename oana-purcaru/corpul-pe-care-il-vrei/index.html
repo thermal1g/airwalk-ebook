@@ -107,10 +107,10 @@ html[data-pal="18"]{--main:#D7FF44;--mid:#E3FF7C;--hi:#EFFFB4;--dark:#386641;--d
 <section class="pains" aria-labelledby="h-pains">
   <div class="wrap">
     <div class="sh"><span class="k">Te regăsești?</span><h2 id="h-pains">Patru situații <em>pe care le văd zilnic.</em></h2></div>
-    <div class="pgrid"><article class="pain" tabindex="0"><div class="pf"><span class="pq">01</span><h3>„Mănânc sănătos și tot nu slăbesc.”</h3><span class="phint">Vezi răspunsul</span></div>
-<div class="pb"><span class="pc">Capitolul 2</span><p>Și alimentele sănătoase au calorii. Îți arăt unde se ascunde surplusul: gustările și băuturile dintre mese.</p></div></article><article class="pain" tabindex="0"><div class="pf"><span class="pq">02</span><h3>Ai slăbit, dar nu-ți place ce vezi în oglindă.</h3><span class="phint">Vezi răspunsul</span></div>
-<div class="pb"><span class="pc">Capitolul 1</span><p>Slăbirea și remodelarea sunt lucruri diferite. Contează ce pierzi: grăsime sau mușchi.</p></div></article><article class="pain" tabindex="0"><div class="pf"><span class="pq">03</span><h3>Faci mult cardio și forma nu se schimbă.</h3><span class="phint">Vezi răspunsul</span></div>
-<div class="pb"><span class="pc">Capitolul 3</span><p>Forța modelează corpul. Cardio arde calorii pe moment, dar nu construiește forma.</p></div></article><article class="pain" tabindex="0"><div class="pf"><span class="pq">04</span><h3>Ai ținut diete și kilogramele au revenit.</h3><span class="phint">Vezi răspunsul</span></div>
+    <div class="pgrid"><article class="pain" tabindex="0"><div class="pf"><img class="pim" src="assets/img/pain1.webp" alt="Oana Purcaru la aparatul cu cablu" loading="lazy" width="720" height="900"><i class="psh"></i><div class="ptop"><span class="pq">01</span><span class="pcap">Capitolul 2</span></div><h3>„Mănânc sănătos și tot nu slăbesc.”</h3><span class="phint">Vezi răspunsul</span></div>
+<div class="pb"><span class="pc">Capitolul 2</span><p>Și alimentele sănătoase au calorii. Îți arăt unde se ascunde surplusul: gustările și băuturile dintre mese.</p></div></article><article class="pain" tabindex="0"><div class="pf"><img class="pim" src="assets/img/pain2.webp" alt="Oana Purcaru, spatele, la aparatul cu cablu" loading="lazy" width="720" height="900"><i class="psh"></i><div class="ptop"><span class="pq">02</span><span class="pcap">Capitolul 1</span></div><h3>Ai slăbit, dar nu-ți place ce vezi în oglindă.</h3><span class="phint">Vezi răspunsul</span></div>
+<div class="pb"><span class="pc">Capitolul 1</span><p>Slăbirea și remodelarea sunt lucruri diferite. Contează ce pierzi: grăsime sau mușchi.</p></div></article><article class="pain" tabindex="0"><div class="pf"><img class="pim" src="assets/img/pain3.webp" alt="Oana Purcaru la presa pentru picioare" loading="lazy" width="720" height="900"><i class="psh"></i><div class="ptop"><span class="pq">03</span><span class="pcap">Capitolul 3</span></div><h3>Faci mult cardio și forma nu se schimbă.</h3><span class="phint">Vezi răspunsul</span></div>
+<div class="pb"><span class="pc">Capitolul 3</span><p>Forța modelează corpul. Cardio arde calorii pe moment, dar nu construiește forma.</p></div></article><article class="pain" tabindex="0"><div class="pf"><img class="pim" src="assets/img/pain4.webp" alt="Oana Purcaru în sală, pe bancă" loading="lazy" width="720" height="900"><i class="psh"></i><div class="ptop"><span class="pq">04</span><span class="pcap">Capitolul 9</span></div><h3>Ai ținut diete și kilogramele au revenit.</h3><span class="phint">Vezi răspunsul</span></div>
 <div class="pb"><span class="pc">Capitolul 9</span><p>Dietele prea restrictive topesc mușchiul și aduc efectul yo-yo. Consecvența bate perfecțiunea.</p></div></article></div>
   </div>
 </section>
@@ -120,54 +120,58 @@ html[data-pal="18"]{--main:#D7FF44;--mid:#E3FF7C;--hi:#EFFFB4;--dark:#386641;--d
   <div class="chpin">
     <div class="chhead wrap">
       <div class="sh"><span class="k">Ce găsești în ghid</span><h2 id="h-ch">10 capitole, <em>de la principii la plan.</em></h2></div>
-      <div class="chprog" aria-hidden="true"><i></i><span><b class="cur-n">01</b> / 10</span></div>
+      <div class="chctl">
+        <div class="chhint" aria-hidden="true"><span class="hi-ico"><i></i></span><span class="hi-t"><b class="t-pin">Derulează în jos, capitolele vin din dreapta</b><b class="t-swipe">Glisează spre stânga pentru capitole</b><b class="t-drag">Trage sau folosește săgețile</b></span></div>
+        <div class="chprog" aria-hidden="true"><i></i><span><b class="cur-n">01</b> / 10</span></div>
+        <div class="charr"><button type="button" class="chb chp" aria-label="Capitolul anterior" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" class="chb chx" aria-label="Capitolul următor"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div>
+      </div>
     </div>
-    <div class="chtrack" tabindex="0" aria-label="Capitolele ghidului, derulează orizontal"><article class="chc" data-cur="Capitolul 1">
+    <div class="chtrack" tabindex="0" data-cur="Trage" aria-label="Capitolele ghidului, derulează orizontal"><article class="chc">
   <div class="chi"><img src="assets/img/ch1.webp" alt="Oana Purcaru în sală, imagine pentru capitolul 1" loading="lazy" width="760" height="1140"></div>
   <div class="cht"><span class="chn">01</span><span class="micro">Formă &gt; kilograme</span>
   <h3>Slăbire nu înseamnă <em>remodelare.</em></h3><p>Slăbirea și remodelarea corporală sunt două lucruri diferite. Nu contează doar câte kilograme pierzi, ci mai ales ce pierzi.</p>
   <p class="rec"><b>Reții:</b> Kilogramele nu spun tot: contează ce pierzi, grăsime sau mușchi.</p></div></article>
-<article class="chc" data-cur="Capitolul 2">
+<article class="chc">
   <div class="chi"><img src="assets/img/ch2.webp" alt="Oana Purcaru în sală, imagine pentru capitolul 2" loading="lazy" width="760" height="1140"></div>
   <div class="cht"><span class="chn">02</span><span class="micro">Deficit = rezultat</span>
   <h3>Cum funcționează <em>slăbirea, de fapt.</em></h3><p>„Mănânc sănătos și tot nu slăbesc.” Este una dintre cele mai frecvente situații pe care le întâlnesc.</p>
   <p class="rec"><b>Reții:</b> Slăbești doar în deficit caloric, chiar dacă mănânci sănătos.</p></div></article>
-<article class="chc" data-cur="Capitolul 3">
+<article class="chc">
   <div class="chi"><img src="assets/img/ch3.webp" alt="Oana Purcaru în sală, imagine pentru capitolul 3" loading="lazy" width="760" height="1017"></div>
   <div class="cht"><span class="chn">03</span><span class="micro">Mușchi = metabolism</span>
   <h3>Masa musculară, <em>aliatul tău.</em></h3><p>În sală modelăm ceea ce se află sub țesutul adipos. De aceea forța contează mai mult decât transpirația.</p>
   <p class="rec"><b>Reții:</b> Forța modelează corpul; cardio doar arde calorii pe moment.</p></div></article>
-<article class="chc" data-cur="Capitolul 4">
+<article class="chc">
   <div class="chi"><img src="assets/img/ch4.webp" alt="Oana Purcaru în sală, imagine pentru capitolul 4" loading="lazy" width="760" height="1140"></div>
   <div class="cht"><span class="chn">04</span><span class="micro">Simplu = sustenabil</span>
   <h3>Alimentația <em>pe înțelesul tuturor.</em></h3><p>Nu ai nevoie de o dietă-minune. Ai nevoie de câteva reguli simple, pe care le poți respecta zilnic.</p>
   <p class="rec"><b>Reții:</b> O sursă de proteină la fiecare masă.</p></div></article>
-<article class="chc" data-cur="Capitolul 5">
+<article class="chc">
   <div class="chi"><img src="assets/img/ch5.webp" alt="Oana Purcaru în sală, imagine pentru capitolul 5" loading="lazy" width="760" height="1017"></div>
   <div class="cht"><span class="chn">05</span><span class="micro">Farfurie = strategie</span>
   <h3>Cum îți construiești <em>mesele.</em></h3><p>Două exemple de zi, una pentru femei și una pentru bărbați, construite pe regulile din capitolul anterior.</p>
   <p class="rec"><b>Reții:</b> Meniurile sunt exemple: cantitățile se adaptează fiecăruia.</p></div></article>
-<article class="chc" data-cur="Capitolul 6">
+<article class="chc">
   <div class="chi"><img src="assets/img/ch6.webp" alt="Oana Purcaru în sală, imagine pentru capitolul 6" loading="lazy" width="760" height="1017"></div>
   <div class="cht"><span class="chn">06</span><span class="micro">Forță = formă</span>
   <h3>Antrenamentul <em>de forță.</em></h3><p>Antrenamentul este o știință. În spatele unui program eficient trebuie să existe o structură, o logică și o selecție corectă a exercițiilor.</p>
   <p class="rec"><b>Reții:</b> Progresezi treptat: ajungi la 15 repetări, apoi crești greutatea.</p></div></article>
-<article class="chc" data-cur="Capitolul 7">
+<article class="chc">
   <div class="chi"><img src="assets/img/ch7.webp" alt="Oana Purcaru în sală, imagine pentru capitolul 7" loading="lazy" width="760" height="1017"></div>
   <div class="cht"><span class="chn">07</span><span class="micro">Cardio = ajutor</span>
   <h3>Cardio: <em>cât și cum.</em></h3><p>Cardio nu trebuie privit doar ca un instrument pentru slăbit. Îl folosesc ca ajutor, nu ca bază.</p>
   <p class="rec"><b>Reții:</b> Cardio ajută, dar nu înlocuiește antrenamentul de forță.</p></div></article>
-<article class="chc" data-cur="Capitolul 8">
+<article class="chc">
   <div class="chi"><img src="assets/img/ch8.webp" alt="Oana Purcaru în sală, imagine pentru capitolul 8" loading="lazy" width="760" height="1140"></div>
   <div class="cht"><span class="chn">08</span><span class="micro">Plan = progres</span>
   <h3>Programele <em>tale.</em></h3><p>Patru programe gata de urmat: femei și bărbați, începători și intermediari.</p>
   <p class="rec"><b>Reții:</b> Alege programul potrivit nivelului tău.</p></div></article>
-<article class="chc" data-cur="Capitolul 9">
+<article class="chc">
   <div class="chi"><img src="assets/img/ch9.webp" alt="Oana Purcaru în sală, imagine pentru capitolul 9" loading="lazy" width="760" height="1017"></div>
   <div class="cht"><span class="chn">09</span><span class="micro">Strategie = rezultate</span>
   <h3>Greșelile care <em>te țin pe loc.</em></h3><p>Cele mai mari greșeli nu țin de un exercițiu sau de un aliment. Țin de lipsa strategiei.</p>
   <p class="rec"><b>Reții:</b> Consecvența contează mai mult decât perfecțiunea.</p></div></article>
-<article class="chc" data-cur="Capitolul 10">
+<article class="chc">
   <div class="chi"><img src="assets/img/ch10.webp" alt="Oana Purcaru în sală, imagine pentru capitolul 10" loading="lazy" width="760" height="1017"></div>
   <div class="cht"><span class="chn">10</span><span class="micro">Corpul tău = regulile tale</span>
   <h3>Fiecare corp <em>e altfel.</em></h3><p>Principiile sunt aceleași pentru toți. Diferă felul în care le adaptăm.</p>
@@ -178,7 +182,8 @@ html[data-pal="18"]{--main:#D7FF44;--mid:#E3FF7C;--hi:#EFFFB4;--dark:#386641;--d
 </section>
 
 <!-- ============ PROGRAMS + MUSCLE MAP ============ -->
-<section class="progs light" id="programe" aria-labelledby="h-pr">
+<div class="seam s1" aria-hidden="true"><i class="sg"></i><svg class="st t1" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><svg class="st t2" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><svg class="st t3" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><i class="dg sd" style="--c:7;--r:3"></i></div>
+<section class="progs light tx-slash" id="programe" aria-labelledby="h-pr">
   <div class="wrap">
     <div class="sh"><span class="k">Capitolul 8 · Programele tale</span><h2 id="h-pr">Patru programe, <em>gata de urmat.</em></h2>
       <p class="intro">Femei și bărbați, începători și intermediari. Alege programul, iar harta îți arată ce mușchi lucrezi în fiecare zi.</p></div>
@@ -211,7 +216,9 @@ html[data-pal="18"]{--main:#D7FF44;--mid:#E3FF7C;--hi:#EFFFB4;--dark:#386641;--d
 </section>
 
 <!-- ============ PAGES ============ -->
+<div class="seam s2" aria-hidden="true"><i class="sg"></i><svg class="st t1" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><svg class="st t2" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><svg class="st t3" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><i class="dg sd" style="--c:5;--r:3"></i></div>
 <section class="pages" id="rasfoieste" aria-labelledby="h-pg">
+  <div class="pturn" aria-hidden="true"><i class="pg"></i><i class="fl"></i></div>
   <div class="wrap sh"><span class="k">Răsfoiește câteva pagini</span><h2 id="h-pg">Gândit pentru telefon, <em>gata și de printat.</em></h2></div>
   <div class="wrap"><div class="lens" data-lens data-ar="0.5625" data-fit="cover" role="region" aria-roledescription="carusel" aria-label="Pagini din ghid" tabindex="0">
 <div class="lens-stage" data-cur="Trage"><canvas aria-hidden="true"></canvas><ul class="lens-fb"><li data-k="Din ghid · 01" data-t="Coperta" data-c="Ediția pentru telefon, gata și de printat în A4."><img src="assets/pg/p1/0.webp" alt="Coperta: Ediția pentru telefon, gata și de printat în A4." loading="lazy" width="720" height="1280" data-k="0"><span><b>Coperta</b> Ediția pentru telefon, gata și de printat în A4.</span></li><li data-k="Din ghid · 02" data-t="Cuprins" data-c="10 capitole, rezultatele clientelor și povestea Oanei."><img src="assets/pg/p1/1.webp" alt="Cuprins: 10 capitole, rezultatele clientelor și povestea Oanei." loading="lazy" width="720" height="1280" data-k="1"><span><b>Cuprins</b> 10 capitole, rezultatele clientelor și povestea Oanei.</span></li><li data-k="Din ghid · 03" data-t="Capitolul 3" data-c="Masa musculară, aliatul tău."><img src="assets/pg/p1/2.webp" alt="Capitolul 3: Masa musculară, aliatul tău." loading="lazy" width="720" height="1280" data-k="2"><span><b>Capitolul 3</b> Masa musculară, aliatul tău.</span></li><li data-k="Din ghid · 04" data-t="Recapitulare" data-c="Fiecare capitol se încheie cu ce reții."><img src="assets/pg/p1/3.webp" alt="Recapitulare: Fiecare capitol se încheie cu ce reții." loading="lazy" width="720" height="1280" data-k="3"><span><b>Recapitulare</b> Fiecare capitol se încheie cu ce reții.</span></li><li data-k="Din ghid · 05" data-t="Capitolul 4" data-c="Cât să mănânci, pe înțelesul tuturor."><img src="assets/pg/p1/4.webp" alt="Capitolul 4: Cât să mănânci, pe înțelesul tuturor." loading="lazy" width="720" height="1280" data-k="4"><span><b>Capitolul 4</b> Cât să mănânci, pe înțelesul tuturor.</span></li><li data-k="Din ghid · 06" data-t="Capitolul 8" data-c="Harta mușchilor, față și spate."><img src="assets/pg/p1/5.webp" alt="Capitolul 8: Harta mușchilor, față și spate." loading="lazy" width="720" height="1280" data-k="5"><span><b>Capitolul 8</b> Harta mușchilor, față și spate.</span></li><li data-k="Din ghid · 07" data-t="Programul 1" data-c="Femei începătoare, 3 zile pe săptămână."><img src="assets/pg/p1/6.webp" alt="Programul 1: Femei începătoare, 3 zile pe săptămână." loading="lazy" width="720" height="1280" data-k="6"><span><b>Programul 1</b> Femei începătoare, 3 zile pe săptămână.</span></li><li data-k="Din ghid · 08" data-t="Rezultate" data-c="Transformările clientelor."><img src="assets/pg/p1/7.webp" alt="Rezultate: Transformările clientelor." loading="lazy" width="720" height="1280" data-k="7"><span><b>Rezultate</b> Transformările clientelor.</span></li><li data-k="Din ghid · 09" data-t="Coperta spate" data-c="Ce găsești în ghid, pe scurt."><img src="assets/pg/p1/8.webp" alt="Coperta spate: Ce găsești în ghid, pe scurt." loading="lazy" width="720" height="1280" data-k="8"><span><b>Coperta spate</b> Ce găsești în ghid, pe scurt.</span></li></ul></div>
@@ -221,6 +228,7 @@ html[data-pal="18"]{--main:#D7FF44;--mid:#E3FF7C;--hi:#EFFFB4;--dark:#386641;--d
 </section>
 
 <!-- ============ RESULTS ============ -->
+<div class="seam s3" aria-hidden="true"><i class="sg"></i><svg class="st t1" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><svg class="st t2" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><svg class="st t3" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><i class="dg sd" style="--c:7;--r:4"></i></div>
 <section class="rz light" id="rezultate" aria-labelledby="h-rz">
   <div class="wrap">
     <div class="sh"><span class="k">Rezultate · clientele mele</span><h2 id="h-rz">Rezultate <em>reale.</em></h2>
@@ -239,6 +247,7 @@ html[data-pal="18"]{--main:#D7FF44;--mid:#E3FF7C;--hi:#EFFFB4;--dark:#386641;--d
 </section>
 
 <!-- ============ QUOTE ============ -->
+<div class="seam s4" aria-hidden="true"><i class="sg"></i><svg class="st t1" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><svg class="st t2" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><svg class="st t3" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><i class="dg sd" style="--c:5;--r:3"></i></div>
 <section class="quote" aria-label="Citat">
   <div class="wrap"><span class="qm" aria-hidden="true">„</span>
     <p class="qt">Transformarea corporală nu este o întâmplare. Este rezultatul unei <em>strategii</em>, al educației, al consecvenței și al unor obiceiuri construite în timp.</p>
@@ -247,6 +256,7 @@ html[data-pal="18"]{--main:#D7FF44;--mid:#E3FF7C;--hi:#EFFFB4;--dark:#386641;--d
 </section>
 
 <!-- ============ ABOUT ============ -->
+<div class="seam s5" aria-hidden="true"><i class="sg"></i><svg class="st t1" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><svg class="st t2" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><svg class="st t3" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><i class="dg sd" style="--c:7;--r:3"></i></div>
 <section class="about" id="oana" aria-labelledby="h-ab">
   <div class="wrap abg">
     <div class="abimg"><img src="assets/img/stage.webp" alt="Oana Purcaru pe scenă, la o competiție IFBB" loading="lazy" width="927" height="929"><span class="abtag">IFBB Pro · Wellness</span></div>
@@ -266,6 +276,7 @@ html[data-pal="18"]{--main:#D7FF44;--mid:#E3FF7C;--hi:#EFFFB4;--dark:#386641;--d
 </section>
 
 <!-- ============ BUY ============ -->
+<div class="seam s6" aria-hidden="true"><i class="sg"></i><svg class="st t1" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><svg class="st t2" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><svg class="st t3" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><i class="dg sd" style="--c:5;--r:4"></i></div>
 <section class="buy" id="cumpara" aria-labelledby="h-buy">
   <div class="hsh b1"></div><i class="dg bd1" style="--c:6;--r:4" aria-hidden="true"></i>
   <div class="wrap bgrid">
@@ -300,6 +311,7 @@ html[data-pal="18"]{--main:#D7FF44;--mid:#E3FF7C;--hi:#EFFFB4;--dark:#386641;--d
 </section>
 
 <!-- ============ FAQ ============ -->
+<div class="seam s7" aria-hidden="true"><i class="sg"></i><svg class="st t1" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><svg class="st t2" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><svg class="st t3" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><i class="dg sd" style="--c:7;--r:3"></i></div>
 <section class="faq light" id="intrebari" aria-labelledby="h-faq">
   <div class="wrap">
     <div class="sh ctr"><span class="k">Întrebări frecvente</span><h2 id="h-faq">Ce ne <em>întreabă lumea.</em></h2></div>
@@ -313,6 +325,7 @@ html[data-pal="18"]{--main:#D7FF44;--mid:#E3FF7C;--hi:#EFFFB4;--dark:#386641;--d
 
 </main>
 
+<div class="seam s8" aria-hidden="true"><i class="sg"></i><svg class="st t1" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><svg class="st t2" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><svg class="st t3" viewBox="0 0 20 18"><path d="M10 1.5L18.5 16.5H1.5Z"/></svg><i class="dg sd" style="--c:5;--r:3"></i></div>
 <footer class="foot">
   <div class="fbig" aria-hidden="true"><span>Corpul pe care</span><span>îl vrei.</span></div>
   <div class="wrap fcols">
