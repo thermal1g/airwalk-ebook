@@ -881,3 +881,8 @@ odo-x{display:inline-block;line-height:1}
 .dg::after{content:"";position:absolute;inset:-6px;background:radial-gradient(circle,var(--lime,var(--hi)) 2.6px,transparent 3px) 6px 6px/11px 11px;-webkit-mask:radial-gradient(circle 70px at var(--mx,-999px) var(--my,-999px),#000 0,#000 30%,transparent 100%);mask:radial-gradient(circle 70px at var(--mx,-999px) var(--my,-999px),#000 0,#000 30%,transparent 100%);opacity:0;transition:opacity .35s}
 .dg.hot::after{opacity:1}
 @media(prefers-reduced-motion:reduce){.btn .bcut,.shw .shx,.dg::after{display:none}}
+/* section transition: shard sweep into #oana */
+.about{position:relative;overflow:hidden}
+.secsw{position:absolute;top:0;bottom:0;left:0;width:46%;z-index:4;pointer-events:none;background:linear-gradient(100deg,var(--main) 0 72%,var(--accdark) 72% 86%,var(--hi) 86%);transform:skewX(-16deg) translateX(-160%)}
+/* logo: OANA in Lime, the same as the loader (Alexandru, 22 Nov 2026) */
+.brand b{color:var(--lime,var(--accdark))}

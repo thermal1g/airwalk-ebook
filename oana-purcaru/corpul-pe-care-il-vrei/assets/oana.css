@@ -5,7 +5,7 @@
 .ohero::before{content:"";position:absolute;inset:0;background:var(--dark);clip-path:polygon(0 0,58% 0,40% 100%,0 100%)}
 .ohg{position:relative;z-index:2;width:min(1240px,100% - 48px);margin-inline:auto;display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
 .ohn{margin:22px 0 0;display:flex;flex-direction:column;line-height:.9}
-.ohn .o1{font:800 clamp(60px,8.4vw,136px)/.88 A;font-stretch:118%;text-transform:uppercase;color:var(--accdark);letter-spacing:-.01em;margin-left:-.03em;text-shadow:0 10px 40px rgba(0,0,0,.25)}
+.ohn .o1{font:800 clamp(60px,8.4vw,136px)/.88 A;font-stretch:118%;text-transform:uppercase;color:var(--lime,var(--accdark));letter-spacing:-.01em;margin-left:-.03em;text-shadow:0 10px 40px rgba(0,0,0,.25)}
 .ohn .o2{font:300 clamp(48px,7vw,112px)/1 A;font-stretch:118%;letter-spacing:-.01em;text-transform:uppercase;margin-top:.02em}
 .ohl{margin-top:26px;max-width:520px;font-size:clamp(17px,1.4vw,19px);opacity:.9}
 .ohchips{list-style:none;margin:24px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}

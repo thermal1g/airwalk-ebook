@@ -105,4 +105,15 @@ if (!RM) { const dgs = $$('.dg');
       hero.addEventListener('pointerleave', () => want(115)); }
     else addEventListener('scroll', () => { const k = Math.min(1, scrollY / (innerHeight * .8)); want(115 - k * 15); }, { passive: true });
   } }
+
+// ---- section transition: shard sweep into "Oana" (approved 22 Nov 2026). The brand shard crosses the screen and
+// the section is revealed behind it, tied to the scroll.
+{ const sec = $('#oana'), inner = sec && $('.abg', sec);
+  if (sec && inner && !RM && window.gsap && window.ScrollTrigger) {
+    const sw = document.createElement('i'); sw.className = 'secsw'; sw.setAttribute('aria-hidden', 'true'); sec.appendChild(sw);
+    gsap.set(sw, { xPercent: -160, skewX: -16 });
+    gsap.timeline({ scrollTrigger: { trigger: sec, start: 'top 82%', end: 'top 12%', scrub: .6 } })
+      .to(sw, { xPercent: 330, ease: 'none', duration: 1 }, 0)
+      .fromTo(inner, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'none', duration: .82 }, .14);
+  } }
 })();

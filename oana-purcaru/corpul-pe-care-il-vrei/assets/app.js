@@ -331,9 +331,8 @@ gsap.from('.rzf .ri img', { scale: 1.15, duration: 1.6, ease: 'power3.out', scro
 }
 
 // ---------- about ----------
-gsap.from('.abimg', { clipPath: 'inset(100% 0 0 0)', duration: 1.4, ease: 'expo.inOut', scrollTrigger: { trigger: '.abg', start: 'top 80%' } });
+// the about section enters with the shard sweep (fx.js, approved 22 Nov 2026)
 gsap.fromTo('.abimg img', { yPercent: -10 }, { yPercent: 0, ease: 'none', scrollTrigger: { trigger: '.about', start: 'top bottom', end: 'bottom top', scrub: true } });
-gsap.from('.abt > *', { y: 30, opacity: 0, duration: .8, stagger: .08, ease: 'power3.out', scrollTrigger: { trigger: '.abt', start: 'top 80%' } });
 
 // ---------- buy ----------
 gsap.from('.bt > *', { y: 36, opacity: 0, duration: .9, stagger: .08, ease: 'power3.out', scrollTrigger: { trigger: '.bgrid', start: 'top 80%' } });
