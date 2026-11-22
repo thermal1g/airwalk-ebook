@@ -750,3 +750,15 @@ html:not(.nopin) .chc:not(.end){height:100%}
 .chc:not(.end) .rec{display:none}
 .chc.end{height:clamp(440px,120vw,560px)}html:not(.nopin) .chc.end{height:100%}
 @media (max-height:820px){html:not(.nopin) .chc:not(.end) .cht>p:not(.rec){-webkit-line-clamp:1}}
+
+/* highlighted words in headings: the handwritten Damion */
+h2 em,h3 em{font-family:L,cursive;font-weight:400;font-stretch:100%;letter-spacing:0;font-size:1.2em;line-height:.9;padding-right:.06em}
+.ff .ft em{font-family:L,cursive}
+/* more neon lime on dark backgrounds: numbers and counters */
+html[data-pal="1"] .hstats b,html[data-pal="1"] .pain .pq,html[data-pal="1"] .chc:not(.end) .chn,html[data-pal="1"] .about .nums b,
+html[data-pal="1"] .cr:not(.cr-kcal) .crv,html[data-pal="1"] .chprog .cur-n,html[data-pal="1"] .hbadge b,html[data-pal="1"] .scpct,
+html[data-pal="1"] .onums b,html[data-pal="1"] .osc:not(.last) .osn{color:var(--lime)}
+html[data-pal="1"] .light .onums b{color:var(--acclight)}
+html[data-pal="1"] .gval{stroke:var(--lime)}
+html[data-pal="1"] .tline{stroke:var(--lime)}html[data-pal="1"] .tfill{fill:color-mix(in srgb,var(--lime) 16%,transparent)}
+html[data-pal="1"] .seam .t3,html[data-pal="1"] .dz svg.dk.tf{color:var(--lime)}
