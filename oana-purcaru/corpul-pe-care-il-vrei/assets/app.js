@@ -389,6 +389,81 @@ $$('.seam').forEach((sm, i) => {
   const sg = $('.sg', sm); if (sg) gsap.from(sg, { scaleX: 0, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: sm, start: 'top 85%' } });
 });
 
+// ---------- chapter rail (same pattern as the programme's section rail) ----------
+{
+  const L = { start: 'Start', ghid: 'Ghidul', probleme: 'Problemele', capitole: 'Capitolele', programe: 'Programe', rasfoieste: 'Răsfoiește', rezultate: 'Rezultate', calculator: 'Calculator', oana: 'Oana', cumpara: 'Oferta', intrebari: 'Întrebări' };
+  const secs = Object.keys(L).map(id => ({ id, el: document.getElementById(id), name: L[id] })).filter(s => s.el);
+  if (secs.length > 3) {
+    const nav = document.createElement('div'); nav.className = 'snav'; nav.setAttribute('role', 'navigation'); nav.setAttribute('aria-label', 'Secțiunile paginii');
+    nav.innerHTML = `<button class="snav-t" type="button" aria-label="Arată secțiunile" aria-expanded="false"></button><div class="snav-tr"><i class="snav-f"></i></div><span class="snav-cur"></span><ol>` +
+      secs.map((s, i) => `<li style="--i:${i}"><a href="#${s.id}"><b>${String(i + 1).padStart(2, '0')}</b><span>${s.name}</span></a></li>`).join('') + '</ol>';
+    document.body.appendChild(nav);
+    const fill = $('.snav-f', nav), cur = $('.snav-cur', nav), lis = $$('li', nav), tog = $('.snav-t', nav);
+    let tops = [], max = 1, act = -1;
+    const Y = () => window.__lenis ? window.__lenis.scroll : scrollY;
+    const measure = () => {
+      max = Math.max(1, ScrollTrigger.maxScroll(window));
+      tops = secs.map(s => { const st = ScrollTrigger.create({ trigger: s.el, start: 'top top' }); const v = st.start; st.kill(); return Math.min(max, v); });
+      tops[0] = 0;
+      lis.forEach((li, i) => li.style.setProperty('--p', (i / (secs.length - 1) * 100).toFixed(2) + '%'));
+      update();
+    };
+    const update = () => {
+      if (!tops.length) return;
+      const y = Y(), n = secs.length - 1;
+      let k = 0; for (let i = 0; i < tops.length; i++) if (y >= tops[i]) k = i;
+      const nx = k < n ? tops[k + 1] : max, loc = nx > tops[k] ? Math.min(1, (y - tops[k]) / (nx - tops[k])) : 1;
+      fill.style.transform = `scaleY(${Math.min(1, (k + loc) / n)})`;
+      let a = 0; for (let i = 0; i < tops.length; i++) if (y >= tops[i] - innerHeight * .4) a = i;
+      if (a !== act) {
+        act = a; lis.forEach((li, i) => { li.classList.toggle('on', i === a); li.classList.toggle('done', i < a); });
+        cur.textContent = String(a + 1).padStart(2, '0') + '  ' + secs[a].name; cur.style.setProperty('--p', lis[a].style.getPropertyValue('--p'));
+        cur.classList.remove('in'); void cur.offsetWidth; cur.classList.add('in');
+      }
+      nav.classList.toggle('show', H.classList.contains('done'));
+    };
+    ScrollTrigger.addEventListener('refresh', measure); ScrollTrigger.refresh();
+    window.__lenis ? window.__lenis.on('scroll', update) : addEventListener('scroll', update, { passive: true });
+    setInterval(update, 800);
+    const close = () => { nav.classList.remove('open'); tog.setAttribute('aria-expanded', 'false'); };
+    const go = i => {
+      const t = i === 0 ? 0 : tops[i] + 2;
+      window.__lenis ? window.__lenis.scrollTo(t, { duration: 1.4 }) : scrollTo({ top: t, behavior: RM ? 'auto' : 'smooth' });
+      close();
+    };
+    lis.forEach((li, i) => $('a', li).addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); go(i); if (e.detail) e.currentTarget.blur(); }));
+    tog.addEventListener('click', () => { const o = nav.classList.toggle('open'); tog.setAttribute('aria-expanded', o); });
+    document.addEventListener('pointerdown', e => { if (!nav.contains(e.target)) close(); });
+    addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  }
+}
+
+// ---------- hero signature: strokes write one after another once in view (after the loader), card drifts with parallax ----------
+{
+  const sig = $('.hsig');
+  if (sig) {
+    const ps = $$('path', sig), ls = ps.map(p => p.getTotalLength() + 1), tot = ls.reduce((a, b) => a + b, 0);
+    ps.forEach((p, i) => { p.style.strokeDasharray = ls[i] + ' ' + ls[i]; });
+    const draw = t => { let n = 0; ps.forEach((p, i) => { const k = Math.min(1, Math.max(0, (t * tot - n) / ls[i])); n += ls[i]; p.style.strokeDashoffset = ls[i] * (1 - k); p.style.visibility = k > .01 ? 'visible' : 'hidden'; }); };
+    if (RM) draw(1); else {
+      draw(0);
+      const start = () => { const t0 = performance.now() + 450, f = now => { const t = Math.min(1, Math.max(0, (now - t0) / 1900)); draw(t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2); if (t < 1) requestAnimationFrame(f); }; requestAnimationFrame(f); };
+      let fired = false;
+      const go = () => { if (fired) return; if (!H.classList.contains('done')) return setTimeout(go, 120); fired = true; start(); };
+      // parallax exactly like airwalk.ro: offset from the section centre × speed, eased toward it
+      const host = $('.hero'); let y = 0;
+      const speed = -0.12;
+      gsap.ticker.add((time, dt) => {
+        if (!fired && H.classList.contains('done') && sig.getBoundingClientRect().top < innerHeight * .92) go();
+        const r = host.getBoundingClientRect(); if (r.bottom < -200) return;
+        const a = r.top + r.height / 2 - innerHeight / 2, k = innerWidth < 992 ? .35 : 1;
+        y += (a * speed * k - y) * (1 - Math.pow(.8, 60 * Math.min(.1, dt / 1000)));
+        sig.style.transform = `translate3d(0,${y.toFixed(1)}px,0)`;
+      });
+    }
+  }
+}
+
 // recalc once fonts and images are in
 addEventListener('load', () => ScrollTrigger.refresh());
 document.fonts && document.fonts.ready.then(() => ScrollTrigger.refresh());
