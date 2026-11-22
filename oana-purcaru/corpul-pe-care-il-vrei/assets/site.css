@@ -3,6 +3,8 @@
 @font-face{font-family:A;font-weight:100 900;font-stretch:62% 125%;font-display:swap;unicode-range:U+0100-024F,U+0218-021B,U+1E00-1EFF;src:url(fonts/archivo-latin-ext-standard-normal.woff2) format('woff2')}
 @font-face{font-family:G;font-weight:100 900;font-display:swap;src:url(fonts/hanken-grotesk-latin-wght-normal.woff2) format('woff2')}
 @font-face{font-family:G;font-weight:100 900;font-display:swap;unicode-range:U+0100-024F,U+0218-021B,U+1E00-1EFF;src:url(fonts/hanken-grotesk-latin-ext-wght-normal.woff2) format('woff2')}
+@font-face{font-family:S;font-display:swap;src:url(fonts/hurricane-latin-400-normal.woff2) format('woff2')}
+@font-face{font-family:S;font-display:swap;unicode-range:U+0100-024F,U+0218-021B,U+1E00-1EFF;src:url(fonts/hurricane-latin-ext-400-normal.woff2) format('woff2')}
 @font-face{font-family:N;font-display:swap;src:url(fonts/anton-latin-400-normal.woff2) format('woff2')}
 @font-face{font-family:N;font-display:swap;unicode-range:U+0100-024F,U+0218-021B,U+1E00-1EFF;src:url(fonts/anton-latin-ext-400-normal.woff2) format('woff2')}
 
@@ -97,7 +99,7 @@ html,main>section,.foot{overflow-x:clip}
 .hgrid{position:relative;z-index:2;width:min(1240px,100% - 48px);margin-inline:auto;display:grid;grid-template-columns:1.08fr .92fr;gap:40px;align-items:center}
 .ht{font-size:clamp(52px,7.6vw,124px);font-weight:900;font-stretch:115%;line-height:1.06;margin:22px 0 0;letter-spacing:-.035em}
 .ht .ln{display:block;padding-top:.06em}
-.ht .acc{color:var(--accdark)}
+.ht .acc{color:var(--accdark);font:400 1.38em/.95 S;letter-spacing:0;padding:.08em .12em .04em 0;margin-top:-.06em}
 .hl{margin-top:24px;font-size:clamp(17px,1.5vw,20px);max-width:520px;opacity:.9}
 .hcta{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px}
 .hstats{list-style:none;margin:40px 0 0;padding:0;display:flex;gap:34px;flex-wrap:wrap}
@@ -581,3 +583,16 @@ a.tl:hover,a.tl:focus-visible{background-size:100% 100%;background-position:0 10
 a.tl:hover::after,a.tl:focus-visible::after{transform:translate(2px,-3px);opacity:1}
 .links a.tl{margin-right:18px}
 @media (prefers-reduced-motion:reduce){a.tl,a.tl::after{transition:none}}
+/* hero: the guide's layered shards (main + mid + light strips, dark inner triangles), same recipe as the cover */
+.hshards{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;overflow:visible}
+.hshards .m,.hpsh .m{fill:var(--main);fill-opacity:.86}
+.hshards .mi,.hpsh .mi{fill:var(--mid);fill-opacity:.5}
+.hshards .h,.hpsh .h{fill:var(--hi);fill-opacity:.42}
+.hshards .d,.hpsh .d{fill:var(--dark);fill-opacity:.85}
+.hshards .g-tl .d{fill:var(--darkest)}
+.hpsh{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hgrid{z-index:2}
+@media (max-width:599px){.hshards .g-l,.hshards .g-r{transform:scaleX(.6)}.hshards .g-r{transform-origin:100% 0}}
+.hpsh .m{fill:var(--dark);fill-opacity:.5}
+.hshards .g-r .m,.hshards .g-tr .m{fill:var(--darkest);fill-opacity:.5}
+.pain .pcap{position:absolute;top:12px;right:12px;margin:0}

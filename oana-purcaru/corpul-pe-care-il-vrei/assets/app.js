@@ -197,6 +197,11 @@ const intro = gsap.timeline({ paused: true, defaults: { ease: 'power4.out' } });
 intro.from('.ht .ln', { yPercent: 55, opacity: 0, rotate: 2.5, duration: 1.1, stagger: .12 })
   .from('.hero .tag', { y: 20, opacity: 0, duration: .7 }, '<.1')
   .from('.hpanel', { clipPath: 'polygon(100% 0,100% 0,100% 100%,100% 100%)', duration: 1.2, ease: 'expo.inOut' }, 0)
+  .from('.hshards .g-l', { x: -9, duration: 1.3, ease: 'expo.out' }, .35)
+  .from('.hshards .g-r', { x: 9, duration: 1.3, ease: 'expo.out' }, .45)
+  .from('.hshards .g-tr', { x: 12, y: -12, duration: 1.3, ease: 'expo.out' }, .3)
+  .from('.hshards .g-bot', { y: 12, duration: 1.2, ease: 'expo.out' }, .5)
+  .from('.hpsh polygon', { opacity: 0, x: 20, stagger: .04, duration: .9, ease: 'power3.out' }, .7)
   .from('.hcut', { y: 90, opacity: 0, scale: .96, duration: 1.3 }, .25)
   .from('.book', { x: -80, y: 40, rotate: -14, opacity: 0, duration: 1.2 }, .55)
   .from('.hbadge', { scale: 0, rotate: -120, duration: 1, ease: 'back.out(1.7)' }, .8)
@@ -222,6 +227,9 @@ gsap.to('.hcut', { yPercent: -8, ease: 'none', scrollTrigger: hs });
 gsap.to('.hpanel', { yPercent: 10, ease: 'none', scrollTrigger: hs });
 gsap.to('.book', { yPercent: -45, rotate: 8, ease: 'none', scrollTrigger: hs });
 gsap.to('.hsh.s2', { xPercent: 8, ease: 'none', scrollTrigger: hs });
+gsap.to('.hshards .g-l', { y: -14, ease: 'none', scrollTrigger: hs });
+gsap.to('.hshards .g-r', { y: 10, ease: 'none', scrollTrigger: hs });
+gsap.to('.hshards .g-tr', { y: 6, x: 3, ease: 'none', scrollTrigger: hs });
 gsap.to('.htxt', { yPercent: 14, opacity: .2, ease: 'none', scrollTrigger: { ...hs, start: '30% top' } });
 const bk = $('.bk');
 if (bk && !TOUCH) {
