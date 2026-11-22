@@ -844,3 +844,40 @@ html body #awc{transition:opacity .6s .3s,visibility .6s .3s}
 .bswipe.play{animation:bSwipe 2.2s cubic-bezier(.4,0,.2,1) both}
 @keyframes bSwipe{0%{opacity:0;transform:translateX(30px)}25%,55%{opacity:1}100%{opacity:0;transform:translateX(-40px)}}
 @media(prefers-reduced-motion:reduce){.bghost,.bswipe{display:none}}
+
+/* ============ interactive layer (fx.js) ============ */
+/* 4 rolling numbers */
+.odo{display:inline-flex;align-items:baseline;white-space:nowrap}
+odo-c{display:inline-block;height:1em;line-height:1;overflow:hidden;vertical-align:top}
+odo-s{display:flex;flex-direction:column;transition:transform 1.1s cubic-bezier(.2,.9,.2,1)}
+odo-d{display:block;height:1em;line-height:1;text-align:center}
+odo-x{display:inline-block;line-height:1}
+/* 1 lime cut on primary buttons */
+.btn{position:relative;overflow:hidden;isolation:isolate}
+.btn .bcut{position:absolute;inset:-2px -30%;z-index:-1;background:var(--lime,var(--hi));transform:translateX(-120%) skewX(-20deg);pointer-events:none}
+.btn.cut .bcut{animation:bCut .62s cubic-bezier(.6,0,.2,1)}
+.btn.cut{animation:bInk .62s steps(1)}
+@keyframes bCut{0%{transform:translateX(-120%) skewX(-20deg)}55%{transform:translateX(0) skewX(-20deg)}100%{transform:translateX(120%) skewX(-20deg)}}
+@keyframes bInk{0%{color:inherit}28%{color:var(--bg)}78%{color:inherit}}
+/* 2 shard-cut section headlines */
+.shw{position:relative;display:block;clip-path:inset(-30% 0 -40% 0)}
+.shw .shx{position:absolute;top:-6%;bottom:-6%;left:0;width:26%;z-index:2;pointer-events:none;transform:skewX(-16deg) translateX(-130%);background:linear-gradient(100deg,var(--main) 0 68%,var(--accdark) 68% 84%,var(--hi) 84%);opacity:.96}
+/* 3 before / after */
+.rzf .ri.ba{position:relative;aspect-ratio:9/14;min-height:0;touch-action:pan-y;cursor:ew-resize;user-select:none;-webkit-user-select:none;--p:50%}
+.rzf .ba img{position:absolute;inset:0;width:100%;height:100%;min-height:0;aspect-ratio:auto;object-fit:cover;object-position:50% 15%;pointer-events:none}
+.rzf .ba .af{clip-path:inset(0 0 0 var(--p))}
+.ba .bl{position:absolute;top:0;bottom:0;left:var(--p);width:2px;margin-left:-1px;background:var(--lime,var(--hi));box-shadow:0 0 12px rgba(0,0,0,.35);pointer-events:none}
+.ba .bh{position:absolute;top:50%;left:var(--p);width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;border:0;background:var(--lime,var(--hi));color:var(--bg);font:900 17px/1 A,sans-serif;display:grid;place-items:center;box-shadow:0 6px 18px rgba(0,0,0,.35);cursor:ew-resize;transition:transform .2s}
+.ba.on .bh{transform:scale(1.12)}
+.ba .bh:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.ba .bt{position:absolute;bottom:12px;font:800 11px/1 A;font-stretch:118%;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:rgba(26,4,9,.72);padding:7px 9px 6px;border-radius:3px;pointer-events:none}
+.ba .b1{left:12px}.ba .b2{right:12px;color:var(--lime,var(--hi))}
+/* 5 tilt cards */
+.tlt{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .5s cubic-bezier(.2,.8,.2,1);will-change:transform}
+.tlt.tilting{transition:transform .12s ease-out}
+.tlt::after{content:"";position:absolute;inset:0;z-index:5;border-radius:inherit;pointer-events:none;background:radial-gradient(circle at var(--gx,50%) var(--gy,30%),rgba(255,255,255,.28),transparent 46%);mix-blend-mode:overlay;opacity:0;transition:opacity .4s}
+.tlt.tilting::after{opacity:1}
+/* 7 reactive dot grids */
+.dg::after{content:"";position:absolute;inset:-6px;background:radial-gradient(circle,var(--lime,var(--hi)) 2.6px,transparent 3px) 6px 6px/11px 11px;-webkit-mask:radial-gradient(circle 70px at var(--mx,-999px) var(--my,-999px),#000 0,#000 30%,transparent 100%);mask:radial-gradient(circle 70px at var(--mx,-999px) var(--my,-999px),#000 0,#000 30%,transparent 100%);opacity:0;transition:opacity .35s}
+.dg.hot::after{opacity:1}
+@media(prefers-reduced-motion:reduce){.btn .bcut,.shw .shx,.dg::after{display:none}}

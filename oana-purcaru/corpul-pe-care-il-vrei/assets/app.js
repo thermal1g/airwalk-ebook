@@ -271,7 +271,7 @@ $$('.sh').forEach(sh => {
   const k = $('.k', sh), h = $('h2', sh), rest = $$('.intro, .btn', sh);
   const tl = gsap.timeline({ scrollTrigger: { trigger: sh, start: 'top 85%' } });
   if (k) tl.from(k, { x: -30, opacity: 0, duration: .7, ease: 'power3.out' });
-  if (h) tl.from(h, { y: 46, opacity: 0, duration: 1, ease: 'power4.out' }, '<.08');
+  // the h2 itself is revealed by the shard cut in fx.js
   if (rest.length) tl.from(rest, { y: 24, opacity: 0, duration: .8, stagger: .08, ease: 'power3.out' }, '<.2');
 });
 
@@ -280,7 +280,7 @@ $$('[data-fill]').forEach(el => gsap.to($$('.w', el), { opacity: 1, stagger: .1,
 gsap.from('.stmt .tag, .stmt .sign', { y: 24, opacity: 0, duration: .8, stagger: .15, scrollTrigger: { trigger: '.stmt', start: 'top 75%' } });
 
 // ---------- pains ----------
-gsap.from('.pain', { y: 70, opacity: 0, rotate: 1.5, duration: 1, stagger: .1, ease: 'power3.out', scrollTrigger: { trigger: '.pgrid', start: 'top 85%' } });
+gsap.from('.pain', { y: 70, opacity: 0, rotate: 1.5, duration: 1, stagger: .1, ease: 'power3.out', clearProps: 'transform', scrollTrigger: { trigger: '.pgrid', start: 'top 85%' } });
 
 // ---------- chapters: pinned horizontal scroll on desktop ----------
 const mmq = gsap.matchMedia();
@@ -299,7 +299,7 @@ mmq.add({ pin: '(min-width:1024px) and (hover:hover) and (pointer:fine)' }, ctx 
   return () => { chPinST = null; chTrack.dataset.cur = 'Trage'; H.classList.add('nopin'); gsap.set(chTrack, { clearProps: 'transform' }); nativeCarousels(); };
 });
 mmq.add('(max-width:1023px), (hover:none), (pointer:coarse)', () => {
-  gsap.from('.chc', { y: 50, opacity: 0, stagger: .08, duration: .8, ease: 'power3.out', scrollTrigger: { trigger: '.chtrack', start: 'top 85%' } });
+  gsap.from('.chc', { y: 50, opacity: 0, stagger: .08, duration: .8, ease: 'power3.out', clearProps: 'transform', scrollTrigger: { trigger: '.chtrack', start: 'top 85%' } });
 });
 $$('.lens').forEach(l => gsap.from(l, { y: 90, opacity: 0, scale: .94, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: l, start: 'top 85%' } }));
 

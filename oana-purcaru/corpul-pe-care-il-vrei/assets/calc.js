@@ -7,6 +7,7 @@ const fmt = (n, d = 0) => n.toLocaleString('ro-RO', { minimumFractionDigits: d, 
 const shown = {};
 function count(k, to, d = 0) {
   const el = o(k); if (!el) return; const from = shown[k] ?? 0; shown[k] = to;
+  if (window.__odo) { window.__odo(el, fmt(to, d)); return; }
   if (RM || !window.gsap) { el.textContent = fmt(to, d); return; }
   const v = { n: from }; gsap.to(v, { n: to, duration: .8, ease: 'power3.out', overwrite: true, onUpdate: () => el.textContent = fmt(v.n, d) });
 }
