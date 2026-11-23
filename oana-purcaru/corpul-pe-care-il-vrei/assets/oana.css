@@ -9,8 +9,8 @@
 .ohn .o2{font:300 clamp(48px,7vw,112px)/1 A;font-stretch:118%;letter-spacing:-.01em;text-transform:uppercase;margin-top:.02em}
 .ohl{margin-top:26px;max-width:520px;font-size:clamp(17px,1.4vw,19px);opacity:.9}
 .ohchips{list-style:none;margin:24px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
-.ohchips li{padding:8px 13px;border-radius:99px;border:1px solid rgba(255,255,255,.28);font:700 12px/1 A;font-stretch:112%;letter-spacing:.04em;transition:background .25s,border-color .25s,transform .25s}
-.ohchips li:hover{background:var(--cta);border-color:var(--cta);color:var(--oncta);transform:translateY(-2px)}
+.ohchips li{padding:8px 13px;border-radius:99px;border:1px solid rgba(255,255,255,.28);font:700 12px/1 A;font-stretch:112%;letter-spacing:.04em;transition:background .25s,border-color .25s,translate .25s}
+.ohchips li:hover{background:var(--cta);border-color:var(--cta);color:var(--oncta);translate:0 -2px}
 .ohv{position:relative;height:min(82vh,780px);min-height:480px}
 .ohframe{position:absolute;inset:0 4% 0 12%;overflow:hidden;border-radius:6px;clip-path:polygon(16% 0,100% 0,100% 100%,0 100%);background:var(--dark)}
 .ohframe img{width:100%;height:112%;object-fit:cover;object-position:50% 20%}
