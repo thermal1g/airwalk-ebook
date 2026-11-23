@@ -106,3 +106,4 @@ html:not(.nopin) .osc{height:100%}html:not(.nopin) .osc .osi{flex:1 1 auto;min-h
 .foot .fbig span:last-child{font-weight:300;color:#fff}
 
 @media (max-width:599px){.foot .fbig{font-size:14.5vw;padding:0 20px;overflow:hidden}.foot .fbig span:last-child{align-self:flex-start}}
+.ohchips+.hcta{margin-top:32px}@media (max-width:599px){.ohchips+.hcta{margin-top:28px}}
