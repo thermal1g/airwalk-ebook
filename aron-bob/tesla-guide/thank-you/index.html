@@ -55,7 +55,7 @@ li:hover::after{transform:none}
 .awm button{width:100%;border:0;background:var(--red);color:#fff;font:800 16px/1 "Archivo",sans-serif;font-stretch:125%;text-transform:uppercase;padding:18px;cursor:pointer}
 .awm button:disabled{background:#3a3a3a;color:#9a9a9a;cursor:not-allowed}
 .awm button:focus-visible,.awm input:focus-visible{outline:3px solid var(--paper);outline-offset:3px}
-</style>
+.awm-warn{margin:4px 0 16px;padding:14px;border:1px solid var(--line);border-left:3px solid var(--red);color:var(--paper);font-size:15px}.awm-warn b{display:inline;margin:0}.mailbox{margin-top:16px;padding:16px;border:1px solid var(--line);color:#D9D6D3;font-size:15px}.mailbox b{color:var(--paper)}.mbtns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}.mbtns a{color:var(--paper);border:1px solid var(--paper);padding:10px 14px;text-decoration:none;font-weight:600}</style>
 <script src='/program/track.js?v=2' data-ga='G-XN7M3PVKFG' data-policy='/aron-bob/tesla-guide/cookies/'></script></head>
 <body>
 <div class="wrap">
@@ -64,12 +64,13 @@ li:hover::after{transform:none}
   <h1>Thank you! <span>The guide is yours</span></h1>
   <p class="lead">Your payment is confirmed. The Complete Tesla Guide is waiting in your Whop account, created automatically with the email you paid with. Here's how to get it:</p>
   <ol>
-   <li><div><b>Tap the button below</b><span>It opens your guide on Whop, the shop that delivers it. If you see the guide's page with a “Get access” button, don't tap it: you've already paid. Tap “Sign in” at the top right instead.</span></div></li>
-   <li><div><b>Sign in with the email you paid with</b><span>No password needed: Whop sends a code to that email. Enter it and you go straight to your guide.</span></div></li>
-   <li><div><b>Download the PDF</b><span>Tap “Complete Tesla Guide - Aron Bob.pdf” and download it. Read it on your phone, tablet or computer, and come back to the same place any time.</span></div></li>
+   <li><div><b>Tap the button below</b><span>It opens the Whop sign-in page. Whop is the shop that delivers your guide.</span></div></li>
+   <li><div><b>Enter the email you paid with</b><span>Tap “Continue”. No password needed: Whop emails you a 6-digit code.</span></div></li>
+   <li><div><b>Enter the code and download the PDF</b><span>The code takes you straight to your guide. Tap “Complete Tesla Guide - Aron Bob.pdf” and download it. It stays there whenever you need it.</span></div></li>
   </ol>
-  <p class="cta"><a class="btn" href="https://whop.com/airwalk-666d/exp_KHG3iW6Z0hZRPC/app/">Sign in and download the guide</a></p>
-  <p class="help" style="margin-top:14px">Seeing “Get access”, “Experience not found” or another product's page? You're not signed in yet, or you signed in with a different email. Sign in with the email you paid with. We also emailed you the same link.</p>
+  <p class="cta"><a class="btn" href="https://whop.com/login/?next=%2Fairwalk-666d%2Fexp_KHG3iW6Z0hZRPC%2Fapp%2F">Sign in and download the guide</a></p>
+  <div class="mailbox"><b>The code goes to the email you paid with.</b> Not there within 2 minutes? Check Spam or Promotions too. <span class="mbtns"><a href="https://mail.google.com/mail/u/0/#search/whop" target="_blank" rel="noopener">Open Gmail</a><a href="https://outlook.live.com/mail/" target="_blank" rel="noopener">Open Outlook</a></span></div>
+  <p class="help" style="margin-top:14px">Seeing the guide’s page with a blue “Get access” button? Don’t tap it: you’ve already paid. Tap “Sign in” at the top right and use the email you paid with.</p>
   <div class="tip"><b>Delivery day already booked?</b>Print the delivery checklist on page 10 and take it with you. Tick it off on the spot, before you sign.</div>
  </div>
  <div class="fail">
@@ -79,7 +80,7 @@ li:hover::after{transform:none}
  </div>
  <p class="help">No email after 15 minutes, or can't find the file? Write to <a href="mailto:studioairwalk@gmail.com">studioairwalk@gmail.com</a> and we'll help right away.</p>
 </div>
-<div class="awm" id="awm" role="dialog" aria-modal="true" aria-labelledby="awm-h" hidden><div class="awm-box"><h2 id="awm-h">You’ve already paid. <span>Read this first.</span></h2><p>Your guide is waiting in your Whop account, created automatically with the email you paid with. To get to it:</p><ol><li><div><span>Tap the red <em>“Sign in and download the guide”</em> button.</span></div></li><li><div><span>On Whop, <b>don’t</b> tap the blue <strong>Get access</strong> button. You’ve already paid. Tap <em>“Sign in”</em> at the top right.</span></div><div class="awm-shots"><img class="awm-shot" src="en-signin.jpg" alt="Whop screen: tap “Sign in” at the top right" width="864" height="85"><img class="awm-shot" src="en-getaccess.jpg" alt="Whop screen: don’t tap the blue “Get access” button" width="864" height="256"></div></li><li><div><span>Enter the email you paid with and the 6-digit code Whop emails you.</span></div></li></ol><label><input type="checkbox" id="awm-c"> <span>Got it: I’ll sign in with the email I paid with and won’t tap “Get access”.</span></label><button type="button" id="awm-b" disabled>Read (5)</button></div></div>
+<div class="awm" id="awm" role="dialog" aria-modal="true" aria-labelledby="awm-h" hidden><div class="awm-box"><h2 id="awm-h">You’ve already paid. <span>Read this first.</span></h2><p>Your guide is waiting in your Whop account, created automatically with the email you paid with. To get to it:</p><ol><li><div><span>Tap the red <em>“Sign in and download the guide”</em> button.</span></div></li><li><div><span>Whop asks for your email. Enter <em>the email you paid with</em> and tap “Continue”.</span></div></li><li><div><span>Enter the 6-digit code from that email (check Spam too). You go straight to your guide.</span></div></li></ol><div class="awm-warn">If you ever land on the guide’s page with a blue <strong>Get access</strong> button, <b>don’t tap it</b>: you’ve already paid. Tap <em>“Sign in”</em> at the top right instead.<div class="awm-shots"><img class="awm-shot" src="en-signin.jpg" alt="Whop screen: tap “Sign in” at the top right" width="864" height="85"><img class="awm-shot" src="en-getaccess.jpg" alt="Whop screen: don’t tap the blue “Get access” button" width="864" height="256"></div></div><label><input type="checkbox" id="awm-c"> <span>Got it: I’ll sign in with the email I paid with and won’t buy the guide again.</span></label><button type="button" id="awm-b" disabled>Read (5)</button></div></div>
 <script>
 (function(){var s=new URLSearchParams(location.search).get('status');if(s==='failed'||s==='canceled')return;
 var m=document.getElementById('awm'),c=document.getElementById('awm-c'),b=document.getElementById('awm-b'),n=5,W="Read ({n})",B="Got it";
