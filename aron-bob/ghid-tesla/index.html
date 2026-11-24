@@ -310,9 +310,8 @@ footer p{transition:color .3s}footer:hover p{color:#d6d2cf}
  <div class="wrap">
   <h2 class="rv">Ia ghidul <span>la preț de lansare</span></h2>
   <p class="lead" style="color:#fff">130 lei în prima săptămână, apoi 150 lei. Primești PDF-ul imediat după plată și îl citești pe telefon, tabletă sau calculator.</p>
-  <div class="co" id="cumpara">
-   <div id="whop-checkout"></div>
-   <noscript><p><a class="btn" href="https://whop.com/checkout/plan_gcs7cNuzIH0az/">Cumpără ghidul</a></p></noscript>
+  <div class="co" id="cumpara" style="min-height:0;background:none;padding:0">
+   <p><a class="btn" id="aw-whop-buy" href="https://whop.com/checkout/plan_gcs7cNuzIH0az/">Cumpără ghidul · 130 lei</a></p>
   </div>
   
   <p class="fine wd" style="margin-top:10px">Prin plată îți dai acordul ca ghidul să fie livrat imediat și iei la cunoștință că pierzi astfel dreptul de retragere de 14 zile. Detalii în <a href="/aron-bob/ghid-tesla/termeni/" style="color:inherit">Termeni și condiții</a>.</p>
@@ -377,12 +376,5 @@ document.querySelectorAll('.btn').forEach(b=>{b.addEventListener('mousemove',e=>
 const buy=document.querySelector('.buy');buy.addEventListener('mousemove',e=>{const r=buy.getBoundingClientRect();buy.style.setProperty('--mx',(e.clientX-r.left)+'px');buy.style.setProperty('--my',(e.clientY-r.top)+'px')});
 })();
 </script>
-<script src="https://cdn.whop.com/elements/amber/elements.js" data-whop-elements></script>
-<script type="module">
-try{
- const c=window.WhopElements().checkout.create({appearance:{theme:{appearance:"dark",accentColor:"red",grayColor:"gray"},classes:{"whop-CheckoutSummaryHead":{color:"#ffffff"},"whop-CheckoutSeller":{color:"#ffffff"},"whop-CheckoutDetailsToggle":{color:"#ffffff"},"whop-CheckoutPrice":{color:"#ffffff"},"whop-CheckoutTotal":{color:"#ffffff"},"whop-CheckoutPriceContext":{color:"#e8e6e3"},"whop-CheckoutPricingDetails":{color:"#e8e6e3"},"whop-CheckoutPromoRow":{color:"#ffffff"}}},plan:"plan_gcs7cNuzIH0az",returnUrl:"https://ebook.airwalk.ro/aron-bob/ghid-tesla/multumim/"});
- c.create("checkout").mount("#whop-checkout");
-}catch(e){document.getElementById("whop-checkout").innerHTML='<p><a class="btn" href="https://whop.com/checkout/plan_gcs7cNuzIH0az/">Cumpără ghidul</a></p>'}
-</script>
-<script id='aw-co'>document.addEventListener('click',e=>{const a=e.target.closest('a[href="#cumpara"],a[href="#buy"]');if(a&&window.awTrack)awTrack('begin_checkout',{currency:'RON'})})</script></body>
+<script id='aw-co'>document.addEventListener('click',e=>{const a=e.target.closest('a[href="#cumpara"],a[href="#buy"],#aw-whop-buy');if(a&&window.awTrack)awTrack('begin_checkout',{currency:'RON'})})</script></body>
 </html>
