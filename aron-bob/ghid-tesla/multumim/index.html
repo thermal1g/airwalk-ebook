@@ -39,6 +39,22 @@ li:hover::after{transform:none}
  @keyframes in{to{opacity:1;transform:none}}
 }
 @media (max-width:600px){li{grid-template-columns:44px 1fr}li::before{font-size:34px}.btn{display:block;text-align:center;clip-path:none}}
+
+.awm{position:fixed;inset:0;z-index:2147483000;background:rgba(0,0,0,.86);display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto}
+.awm[hidden]{display:none}
+.awm-box{background:#0d0d0d;border:1px solid var(--line);border-top:4px solid var(--red);max-width:520px;width:100%;padding:28px 24px 24px;max-height:calc(100vh - 32px);overflow:auto}
+.awm h2{font:800 26px/1.05 "Archivo",sans-serif;font-stretch:125%;text-transform:uppercase;margin:0 0 10px}
+.awm h2 span{display:block;color:var(--red);font-weight:300}
+.awm p{color:#D9D6D3;font-size:16px;margin:0 0 16px}
+.awm ol{margin:0 0 18px}.awm li{grid-template-columns:36px 1fr;gap:10px;padding:12px 0;opacity:1!important;transform:none!important;animation:none!important}
+.awm li::before{font-size:26px}.awm li::after{display:none}
+.awm li span{color:var(--paper)}.awm li b{display:inline;margin:0;font-size:inherit}.awm strong{color:#fff;background:#1d4ed8;padding:1px 6px;border-radius:3px;white-space:nowrap}
+.awm em{font-style:normal;color:#fff;border-bottom:2px solid var(--red)}
+.awm label{display:flex;gap:12px;align-items:flex-start;cursor:pointer;padding:14px;border:1px solid var(--line);margin-bottom:16px;font-size:16px}
+.awm input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:var(--red)}
+.awm button{width:100%;border:0;background:var(--red);color:#fff;font:800 16px/1 "Archivo",sans-serif;font-stretch:125%;text-transform:uppercase;padding:18px;cursor:pointer}
+.awm button:disabled{background:#3a3a3a;color:#9a9a9a;cursor:not-allowed}
+.awm button:focus-visible,.awm input:focus-visible{outline:3px solid var(--paper);outline-offset:3px}
 </style>
 <script src='/program/track.js?v=2' data-ga='G-XN7M3PVKFG' data-policy='/aron-bob/ghid-tesla/cookie-uri/'></script></head>
 <body>
@@ -63,6 +79,18 @@ li:hover::after{transform:none}
  </div>
  <p class="help">N-ai primit emailul în 15 minute sau nu găsești fișierul? Scrie-ne la <a href="mailto:studioairwalk@gmail.com">studioairwalk@gmail.com</a> și te ajutăm imediat.</p>
 </div>
+<div class="awm" id="awm" role="dialog" aria-modal="true" aria-labelledby="awm-h" hidden><div class="awm-box"><h2 id="awm-h">Ai plătit deja. <span>Citește asta înainte.</span></h2><p>Ghidul te așteaptă în contul tău Whop, creat automat cu emailul de la plată. Ca să ajungi la el:</p><ol><li><div><span>Apasă butonul roșu <em>„Intră în cont și descarcă ghidul”</em>.</span></div></li><li><div><span>Pe Whop <b>nu</b> apăsa butonul albastru <strong>Obține acces</strong> (Get access). Ai plătit deja. Apasă <em>„Conectează-te”</em> (Sign in), din dreapta sus.</span></div></li><li><div><span>Scrie emailul folosit la plată și codul de 6 cifre pe care Whop ți-l trimite pe email.</span></div></li></ol><label><input type="checkbox" id="awm-c"> <span>Am înțeles: mă conectez cu emailul de la plată și nu apăs „Obține acces”.</span></label><button type="button" id="awm-b" disabled>Citește (5)</button></div></div>
+<script>
+(function(){var s=new URLSearchParams(location.search).get('status');if(s==='failed'||s==='canceled')return;
+var m=document.getElementById('awm'),c=document.getElementById('awm-c'),b=document.getElementById('awm-b'),n=5,W="Cite\u0219te ({n})",B="Am \u00een\u021beles";
+m.hidden=false;document.documentElement.style.overflow='hidden';
+function u(){b.disabled=n>0||!c.checked;b.textContent=n>0?W.replace('{n}',n):B}
+var t=setInterval(function(){n--;if(n<=0){n=0;clearInterval(t)}u()},1000);
+c.addEventListener('change',u);u();setTimeout(function(){c.focus()},50);
+document.addEventListener('keydown',function(e){if(!m.hidden&&e.key==='Escape')e.preventDefault()});
+b.addEventListener('click',function(){if(b.disabled)return;m.hidden=true;document.documentElement.style.overflow='';var a=document.querySelector('.cta .btn');a&&a.focus();window.awTrack&&awTrack('thankyou_popup_ack',{})});
+})();
+</script>
 <script>
 var s=new URLSearchParams(location.search).get('status');
 if(s==='failed'||s==='canceled')document.body.classList.add('failed');
