@@ -457,7 +457,7 @@ if (!RM && matchMedia('(hover:hover) and (pointer:fine)').matches) {
     const nm = ['@andrei.m', '@ioana_c', '@vlad.t'];
     const rx = document.createElement('div'); rx.className = 'rx'; rx.setAttribute('aria-hidden', 'true');
     rx.innerHTML = `<div class='rx-dim'></div>
-      <div class='rx1'><i class='box'></i><span class='tag'><b>0</b> ${RO ? 'urmăritori' : 'followers'} <em>✓</em></span><span class='rng'>15.000 – 300.000</span></div>
+      <div class='rx1'><i class='box'></i><span class='tag'><b>0</b> ${RO ? 'urmăritori' : 'followers'} <em>✓</em></span><span class='rng'>35.000 – 500.000</span></div>
       <div class='rx2'>${qs.map((q, i) => `<div class='bub' style='--i:${i}'><i></i><div><b>${nm[i]}</b><span>${q}</span></div></div>`).join('')}</div>
       <div class='rx3'><img src='${base}p17.webp' alt=''><span>${RO ? 'Metoda ta, cu cifrele tale' : 'Your method, your numbers'}</span></div>
       <div class='rx4'><div class='ghost'><span>+</span></div><b>${RO ? 'Ghidul tău' : 'Your guide'}</b><small>${RO ? 'încă nu există' : 'doesn’t exist yet'}</small></div>`;
